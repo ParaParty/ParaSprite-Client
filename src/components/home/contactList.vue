@@ -183,8 +183,8 @@ export default {
         items: [
           { label: '个人资料' },
           { label: '添加备注' },
-          { label: '移除消息列表', divided: true },
-          { label: '屏蔽此人信息' },
+          { label: '移出消息列表', divided: true },
+          { label: '屏蔽此人消息' },
           { label: '删除好友' }
         ],
         customClass: 'contextmenu',
