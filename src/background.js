@@ -98,3 +98,26 @@ ipcMain.on('maximize', e => {
 ipcMain.on('close', e => {
   win.close()
 })
+// 展示图片
+let picWin
+ipcMain.on('showPic', e => {
+  showPic()
+})
+// 关闭图片
+ipcMain.on('closePic', e => {
+  picWin.close()
+})
+function showPic () {
+  picWin = new BrowserWindow({
+    width: 750,
+    height: 500,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  picWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/picviewer')
+  picWin.on('closed', () => {
+    picWin = null
+  })
+}

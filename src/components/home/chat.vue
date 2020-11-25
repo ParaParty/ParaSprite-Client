@@ -17,7 +17,7 @@
           <div class="message">
             <p>嘿嘿！<span class="send-time">9:23</span></p>
             <p>你好，在吗？<span class="send-time">9:23</span></p>
-            <p>
+            <p @click="showPic">
               <img src="@/assets/avatar2.png" alt="">
               <span class="send-time">9:24</span>
             </p>
@@ -80,10 +80,16 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import editor from '@/components/home/editor.vue'
 export default {
   components: {
     editor
+  },
+  methods: {
+    showPic () {
+      ipcRenderer.send('showPic')
+    }
   }
 }
 </script>
@@ -120,10 +126,8 @@ export default {
       border-radius: 0.2em
       padding: 0.5em
       transition: background 0.3s
-      // &:hover
-      //   background: $hover-bg
-      //   &::-webkit-scrollbar
-      //     width: 1em
+      img:hover
+        cursor: pointer
     &::-webkit-scrollbar
       width: 0.2em
     &::-webkit-scrollbar-thumb
@@ -135,10 +139,15 @@ export default {
   .avatar
     width: 2.5em
     height: 2.5em
+    cursor: pointer
     img
       width: 2.5em
       height: 2.5em
       border-radius: 2em
+      transition: box-shadow 0.3s
+    &:hover
+      img
+        box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.6)
   .content
     margin-left: 0.5em
   .nick

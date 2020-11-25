@@ -13,6 +13,18 @@ export default {
   components: {
     titleBar,
     sidebar
+  },
+  mounted () {
+    // fetch('http://localhost:8888/echo/test')
+    //   .then(function (response) {
+    //     return response.json()
+    //   })
+    //   .then(function (myJson) {
+    //     console.log(myJson)
+    //   })
+    // this.$socket.emit('my other event', {
+    //   abc: 123
+    // })
   }
 }
 </script>
@@ -34,6 +46,20 @@ export default {
     // filter: invert(1) hue-rotate(180deg)
   i
     text-shadow: none
+  // 图片查看部分
+  .viewer-backdrop
+    background: $block-bg !important
+    z-index: 1 !important
+  .viewer-fullscreen
+    display: none
+  .viewer-toolbar > ul > li
+    background-color: $dark
+    border-radius: 2px !important
+    margin: 0 2px
+    opacity: 0.5
+  .viewer-navbar
+    background-color: $dark
+    opacity: 0.5
   .contextmenu
     padding: 0 !important
     .menu_body

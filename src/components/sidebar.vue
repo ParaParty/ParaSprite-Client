@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div v-if="$route.name != 'PicViewer'" class="sidebar">
     <ul class="menu">
       <li class="active">
         <i class="iconfont icon-shouye"></i>
