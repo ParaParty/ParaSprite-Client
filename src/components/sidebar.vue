@@ -25,6 +25,8 @@ export default {
   .sidebar
     width: 4em
     height: 100vh
+    background: #fff
+    z-index: 1
   .menu
     display: flex
     align-items: center

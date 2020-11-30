@@ -1,5 +1,6 @@
 <template>
   <div class="info">
+    <p>123</p>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="sass" scoped>
+.info
+  display: none
 </style>

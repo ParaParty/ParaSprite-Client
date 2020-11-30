@@ -4,7 +4,7 @@
       <i class="iconfont icon-xiaoxi"></i>
       <h1>陆陆侠</h1>
     </div>
-    <ul class="chat-content">
+    <ul ref="chat" class="chat-content">
       <li class="time">
         <p>2020年11月22日</p>
       </li>
@@ -74,6 +74,18 @@
           </div>
         </div>
       </li>
+      <li class="right">
+        <div class="avatar">
+          <img src="@/assets/avatar.png" alt="">
+        </div>
+        <div class="content">
+          <h2 class="nick">陆陆侠</h2>
+          <div class="message">
+            <p>测试发送<span class="send-time">10:35</span></p>
+            <p v-for="msg in msgTest" :key='msg'>{{msg}}<span class="send-time">10:35</span></p>
+          </div>
+        </div>
+      </li>
     </ul>
     <editor/>
   </div>
@@ -85,6 +97,21 @@ import editor from '@/components/home/editor.vue'
 export default {
   components: {
     editor
+  },
+  data () {
+    return {
+      msgTest: []
+    }
+  },
+  sockets: {
+    // 测试发送
+    message (msg) {
+      this.msgTest.push(msg)
+      console.log(msg)
+      this.$nextTick(() => {
+        this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
+      })
+    }
   },
   methods: {
     showPic () {
@@ -99,7 +126,7 @@ export default {
   .chat
     width: calc(100% - 14em)
     height: 100%
-
+  // 顶部栏
   .chat-title
     position: absolute
     display: flex
@@ -115,6 +142,7 @@ export default {
     h1
       font-size: 1em
       margin-left: 0.5em
+  // 聊天区域
   .chat-content
     display: flex
     flex-direction: column
@@ -129,13 +157,24 @@ export default {
       img:hover
         cursor: pointer
     &::-webkit-scrollbar
-      width: 0.2em
+      width: 20px
     &::-webkit-scrollbar-thumb
       background: rgba(0, 0, 0, 0)
-      transition: background 0.3s
+      border: 6px solid transparent
+      background-clip: padding-box
+      border-radius: 10px
     &:hover
       &::-webkit-scrollbar-thumb
-        background: rgba(0, 0, 0, 0.3)
+        background: rgba(0, 0, 0, 0.2)
+        border: 6px solid transparent
+        background-clip: padding-box
+        border-radius: 10px
+        &:hover
+          background: rgba(0, 0, 0, 0.3)
+          border: 6px solid transparent
+          background-clip: padding-box
+          border-radius: 10px
+  // 用户信息部分
   .avatar
     width: 2.5em
     height: 2.5em
@@ -154,6 +193,7 @@ export default {
     font-size: 0.8em
     font-weight: normal
     color: $dark
+  // 消息部分
   .message
     padding: 0.25em
     background: $block-bg
@@ -177,6 +217,7 @@ export default {
         border-radius: 0.2em
         .send-time
           opacity: 0.8
+  // 当消息位于右侧
   .right
     justify-content: flex-end
     .avatar
@@ -195,6 +236,7 @@ export default {
       left: inherit !important
       right: calc(100% + 1em)
       color: rgba(0, 0, 0, 0.7)
+  // 消息时间
   .time p
     margin: 0 auto
     font-size: 0.8em

@@ -65,6 +65,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+  showPic()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -101,10 +102,14 @@ ipcMain.on('close', e => {
 // 展示图片
 let picWin
 ipcMain.on('showPic', e => {
+  // picWin.center()
+  // picWin.show()
   showPic()
+  picWin.show()
 })
 // 关闭图片
 ipcMain.on('closePic', e => {
+  picWin.hide()
   picWin.close()
 })
 function showPic () {
@@ -112,6 +117,7 @@ function showPic () {
     width: 750,
     height: 500,
     frame: false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }

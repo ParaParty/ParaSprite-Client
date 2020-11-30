@@ -2,7 +2,9 @@
   <div id="app">
     <titleBar/>
     <sidebar/>
-    <router-view/>
+    <transition name="show">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
@@ -43,6 +45,7 @@ export default {
     display: flex
     background: $bg
     user-select: none
+    overflow: hidden
     // filter: invert(1) hue-rotate(180deg)
   i
     text-shadow: none
@@ -81,4 +84,13 @@ export default {
           bottom: -5px
           left: 0
           border-bottom: 1px solid $active-bg
+  // 路由过渡
+  .show-enter-active, .show-leave-active
+    transition: all .3s
+  .show-enter, .show-leave-to
+    position: absolute
+    width: calc(100vw - 4em)
+    left: 4em
+    transform: scale(1.05)
+    opacity: 0
 </style>
