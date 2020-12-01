@@ -65,7 +65,7 @@ export default {
       // 当前展示的类别
       nowShow: 0,
       // 当前选中的联系人（菜单/列表/项）
-      nowChoose: [0, 0, 0],
+      nowChoose: [-1, 0, 0],
       // 消息列表
       messageList: [
         {

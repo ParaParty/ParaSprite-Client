@@ -2,6 +2,7 @@
   <div class="home">
     <contact/>
     <chat/>
+    <intro/>
     <chatInfo/>
   </div>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import contact from '@/components/home/contact.vue'
 import chat from '@/components/home/chat.vue'
+import intro from '@/components/home/intro.vue'
 import chatInfo from '@/components/home/chatInfo.vue'
 
 export default {
@@ -16,6 +18,7 @@ export default {
   components: {
     contact,
     chat,
+    intro,
     chatInfo
   }
 }
