@@ -36,7 +36,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .title-bar
     position: absolute
     height: 2em
@@ -56,15 +55,15 @@ export default {
       align-items: center
       height: 100%
       width: 3em
-      color: $text
+      color: var(--text)
       opacity: 0.5
       transition: all 0.3s
       &:hover
-        background: $hover-bg
+        background: var(--hover-bg)
         opacity: 1
   .close
     polygon
-      stroke: $text
+      stroke: var(--text)
       color: transparent
       opacity: 0.9
     &:hover

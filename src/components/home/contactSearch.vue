@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import "~@/assets/color.sass"
+
 .contact-search
   width: 100%
   padding: 1em
@@ -74,7 +74,7 @@ input
   -webkit-app-region: no-drag
   z-index: 2
   &:hover, &:focus
-    border: 1px solid $dark
+    border: 1px solid var(--dark)
 .content
   position: absolute
   top: 0
@@ -83,7 +83,7 @@ input
   height: 20em
   border-radius: 0.2em
   border: 1px solid #ddd
-  background: $bg
+  background: var(--bg)
   z-index: 1
   opacity: 0
   pointer-events: none
@@ -96,10 +96,10 @@ input
     flex-direction: column
     height: calc(100% - 4em)
     padding: 0 1.2em
-    color: $text
+    color: var(--text)
     font-size: 0.8em
     .search-box
-      background: $block-bg
+      background: var(--block-bg)
       padding: 0.5em
       border-radius: 0.2em
       margin-top: 1em
@@ -123,7 +123,7 @@ input
       border-radius: 1em
       margin-right: 0.5em
     &:hover
-      background: $hover-bg
+      background: var(--hover-bg)
 .show
   opacity: 1
   pointer-events: all

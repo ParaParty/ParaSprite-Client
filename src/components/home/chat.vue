@@ -30,7 +30,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .chat
     width: 100%
     height: 100%
@@ -39,10 +38,10 @@ export default {
     position: absolute
     display: flex
     width: calc(100% - 0.2em)
-    color: $text
+    color: var(--text)
     height: 5em
     padding: 1em
-    background: linear-gradient(to bottom, $bg, transparent)
+    background: linear-gradient(to bottom, var(--bg), transparent)
     z-index: 1
     i
       font-size: 1.5em

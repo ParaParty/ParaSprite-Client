@@ -36,7 +36,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .login
     width: calc(100% - 4em)
     height: 100vh
@@ -66,7 +65,7 @@ export default {
       letter-spacing: 0.1em
       color: #252525
     p
-      color: $dark
+      color: var(--dark)
       margin-top: 0.5em
   .input
     border-radius: 0.2em
@@ -90,7 +89,7 @@ export default {
       border-radius: 0.2em
       text-align: center
   .tip
-    color: $text
+    color: var(--text)
     font-size: 0.8em
     margin-top: 1em
     opacity: 0.6

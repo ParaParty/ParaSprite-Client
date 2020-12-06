@@ -17,11 +17,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .contact
     width: 14em
     height: 100vh
-    background: $block-bg
+    background: var(--block-bg)
     display: flex
     flex-direction: column
     align-items: center

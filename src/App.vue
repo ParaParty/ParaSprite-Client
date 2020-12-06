@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="light-theme">
     <titleBar/>
     <sidebar/>
     <transition name="show">
@@ -33,7 +33,6 @@ export default {
 
 <style lang="sass">
   @import url('//at.alicdn.com/t/font_2176265_ua72vqacgmq.css')
-  @import "~@/assets/color.sass"
   *, *:after, *:before
     position: relative
     box-sizing: border-box
@@ -43,7 +42,7 @@ export default {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.1)
   #app
     display: flex
-    background: $bg
+    background: var(--bg)
     user-select: none
     overflow: hidden
     // filter: invert(1) hue-rotate(180deg)
@@ -51,17 +50,17 @@ export default {
     text-shadow: none
   // 图片查看部分
   .viewer-backdrop
-    background: $block-bg !important
+    background: var(--block-bg) !important
     z-index: 1 !important
   .viewer-fullscreen
     display: none
   .viewer-toolbar > ul > li
-    background-color: $dark
+    background-color: var(--dark)
     border-radius: 2px !important
     margin: 0 2px
     opacity: 0.5
   .viewer-navbar
-    background-color: $dark
+    background-color: var(--dark)
     opacity: 0.5
   .contextmenu
     padding: 0 !important
@@ -69,10 +68,10 @@ export default {
       margin: 0.5em
       .menu_item
         border-radius: 0.2em
-        color: $text
+        color: var(--text)
         &:hover
-          background: $hover-bg
-          color: $text
+          background: var(--hover-bg)
+          color: var(--text)
       .menu_item__divided
         margin-bottom: 10px
         border: none
@@ -83,7 +82,7 @@ export default {
           position: absolute
           bottom: -5px
           left: 0
-          border-bottom: 1px solid $active-bg
+          border-bottom: 1px solid var(--active-bg)
   // 路由过渡
   .show-enter-active, .show-leave-active
     transition: all .3s
@@ -93,4 +92,21 @@ export default {
     left: 4em
     transform: scale(1.05)
     opacity: 0
+  // 主题色
+  .light-theme
+    --bg: #fff
+    --block-bg: #f5f5f5
+    --hover-bg: #eee
+    --active-bg: #ddd
+    --dark: rgba(0, 0, 0, 0.5)
+    --text: rgba(0, 0, 0, 0.7)
+    --main: #ea5089
+  .dark-theme
+    --bg: #fff
+    --block-bg: #f5f5f5
+    --hover-bg: #eee
+    --active-bg: #ddd
+    --dark: rgba(0, 0, 0, 0.5)
+    --text: rgba(0, 0, 0, 0.7)
+    --main: #ea5089
 </style>

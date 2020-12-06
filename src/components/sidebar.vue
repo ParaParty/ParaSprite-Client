@@ -21,11 +21,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .sidebar
     width: 4em
     height: 100vh
-    background: #fff
+    background: var(--bg)
     z-index: 1
   .menu
     display: flex
@@ -38,17 +37,17 @@ export default {
       border-radius: 2em
       line-height: 2.5em
       margin: 0.5em 0
-      color: $text
+      color: var(--text)
       text-align: center
       list-style: none
-      background: $block-bg
+      background: var(--block-bg)
       &:hover
-        background: $hover-bg
+        background: var(--hover-bg)
     i
       font-size: 1.5em
   .active
-    background: $main !important
-    color: $bg !important
+    background: var(--main) !important
+    color: var(--bg) !important
     i
       font-size: 1em
   .setting

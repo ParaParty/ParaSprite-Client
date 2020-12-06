@@ -101,7 +101,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   // 聊天区域
   .chat-content
     display: flex
@@ -152,14 +151,14 @@ export default {
   .nick
     font-size: 0.8em
     font-weight: normal
-    color: $dark
+    color: var(--dark)
   // 消息部分
   .message
     padding: 0.25em
-    background: $block-bg
+    background: var(--block-bg)
     margin-top: 0.2em
     border-radius: 0 0.5em 0.5em 0.5em
-    color: $text
+    color: var(--text)
     p
       padding: 0.25em
       img
@@ -190,8 +189,8 @@ export default {
       text-align: right
     .message
       border-radius: 0.5em 0 0.5em 0.5em
-      background: $main
-      color: $bg
+      background: var(--main)
+      color: var(--bg)
     .send-time
       left: inherit !important
       right: calc(100% + 1em)
@@ -200,7 +199,7 @@ export default {
   .notice p
     margin: 0 auto
     font-size: 0.8em
-    color: $text
+    color: var(--text)
   .time-today p
-    color: $main
+    color: var(--main)
 </style>

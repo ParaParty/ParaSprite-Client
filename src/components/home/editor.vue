@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
+
   .editor
     display: flex
     align-items: flex-end
@@ -35,7 +35,7 @@ export default {
     right: 0
     height: 5em
     padding: 1em
-    background: linear-gradient(to top, $bg, transparent)
+    background: linear-gradient(to top, var(--bg), transparent)
     width: calc(100% - 0.2em)
   .content
     display: flex
@@ -48,7 +48,7 @@ export default {
       padding: 0.5em
       border: 1px solid #fff
       border-radius: 0.2em
-      background: $block-bg
+      background: var(--block-bg)
       margin: 0px
       resize: none
       font-family: 'Microsoft Yahei'

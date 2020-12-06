@@ -213,27 +213,26 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
   .contact-list
     width: 100%
     height: calc(100% - 2em)
   .type
     display: flex
     justify-content: space-between
-    border-bottom: 1px solid $hover-bg
+    border-bottom: 1px solid var(--hover-bg)
     li
       display: inline-block
       width: calc( 100% / 3 )
       height: 2.5em
       text-align: center
       line-height: 2.5em
-      color: $text
+      color: var(--text)
       transition: color 0.3s
       cursor: pointer
       &:hover
-        color: $main
+        color: var(--main)
   .type-active
-    color: $main !important
+    color: var(--main) !important
     border-bottom: 1px solid
 
   .item-list
@@ -268,8 +267,8 @@ export default {
     align-items: center
     list-style: none
     font-weight: bold
-    color: $text
-    background: $hover-bg
+    color: var(--text)
+    background: var(--hover-bg)
     top: 0
     padding: 0.5em
     opacity: 0.8
@@ -293,14 +292,14 @@ export default {
     transition: background 0.3s
     cursor: pointer
     &:hover
-      background: $hover-bg
+      background: var(--hover-bg)
   .active-item
     display: flex !important
-    background: $active-bg !important
+    background: var(--active-bg) !important
   .avatar
     width: 2.5em
     height: 2.5em
-    background: $hover-bg
+    background: var(--hover-bg)
     border-radius: 2em
     img
       width: 100%
@@ -309,19 +308,19 @@ export default {
   .info
     margin-left: 0.5em
   .nick
-    color: $text
+    color: var(--text)
     margin-bottom: 0.1em
   .content
     font-size: 0.8em
     opacity: 0.6
-    color: $text
+    color: var(--text)
   .num
     position: absolute
     right: 0.5em
-    color: $main
+    color: var(--main)
   .status-new
     .content
-      color: $main
+      color: var(--main)
       opacity: 0.8
   .status-offline
     opacity: 0.5

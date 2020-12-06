@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "~@/assets/color.sass"
+
   .intro
     display: flex
     justify-content: center
@@ -36,7 +36,7 @@ export default {
     position: absolute
     width: 100%
     height: 100%
-    background: #fff
+    background: var(--bg)
   .logo
     position: absolute
     transform: scale(4)
@@ -46,7 +46,7 @@ export default {
   .content
     display: flex
     align-items: center
-    color: $text
+    color: var(--text)
     img
       margin-right: 1em
     .title
@@ -56,6 +56,6 @@ export default {
       margin-top: 0.5em
       line-height: 2em
     .tip
-      color: $main
+      color: var(--main)
       padding: 0 0.5em
 </style>
