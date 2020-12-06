@@ -8,17 +8,32 @@
     <!-- 消息列表 -->
     <div :style="{transform: 'translate(' + (0 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 0 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in messageList" :key="lists.id" :class="['list', lists.show ? '' : 'list-hide']">
-        <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @contextmenu.prevent='onUserMenu' @click="choose(0, n, m)" v-for="(item, m) in lists.list" :key="item.id" :class="['item', nowChoose[0] == 0 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '', item.haveNewMessage ? 'status-new': '', item.online ? '' : 'status-offline']">
+        <li @click="show(n)" class="title">
+          <i class="iconfont icon-zhankai"></i>
+          {{lists.name}}
+        </li>
+        <li @contextmenu.prevent='onUserMenu'
+            @click="choose(0, n, m, item.id)"
+            v-for="(item, m) in lists.list"
+            :key="item.type + item.id"
+            :class="[
+              'item',
+              nowChoose[0] == 0 &&
+              nowChoose[1] == n &&
+              nowChoose[2] == m ? 'active-item' : '',
+              item.lastMsgNum ? 'status-new': '',
+              item.type == 'user' && !include.user[item.id].online ? 'status-offline' : ''
+            ]"
+        >
           <div class="avatar">
             <img src="@/assets/avatar.png" alt="">
           </div>
           <div class="info">
-            <p class="nick">{{item.nick}}</p>
-            <p class="content">{{item.newMessage}}</p>
+            <p class="nick">{{item.type == 'user' ? include.user[item.id].nick : include.group[item.id].nick}}</p>
+            <p class="content">{{item.lastMsg}}</p>
           </div>
-          <div v-if="item.newMessageNum" class="num">
-            <p>+{{item.newMessageNum}}</p>
+          <div v-if="item.lastMsgNum" class="num">
+            <p>+{{item.lastMsgNum}}</p>
           </div>
         </li>
       </ul>
@@ -27,14 +42,24 @@
     <div :style="{transform: 'translate(' + (0.5 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 1 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in contactList" :key="lists.id" :class="['list', lists.show ? '' : 'list-hide']">
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @click="choose(1, n, m)" v-for="(item, m) in lists.list" :key="item.id" :class="['item', nowChoose[0] == 1 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '', item.online ? '' : 'status-offline']">
+        <li @click="choose(1, n, m, item.id)"
+          v-for="(item, m) in lists.list"
+          :key="item.id"
+          :class="[
+            'item',
+            nowChoose[0] == 1 &&
+            nowChoose[1] == n &&
+            nowChoose[2] == m ? 'active-item' : '',
+            include.user[item.id].online ? '' : 'status-offline'
+          ]"
+        >
           <div class="avatar">
             <img src="@/assets/avatar.png" alt="">
           </div>
           <div class="info">
-            <p class="nick">{{item.nick}}</p>
+            <p class="nick">{{include.user[item.id].nick}}</p>
             <div>
-              <p class="content">{{item.icon}}{{item.sign}}</p>
+              <p class="content">{{include.user[item.id].emoji}}{{include.user[item.id].sign}} </p>
             </div>
           </div>
         </li>
@@ -42,15 +67,18 @@
     </div>
     <!-- 群列表 -->
     <div :style="{transform: 'translate(' + (1 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 2 ? '' : 'type-hide', 'item-list']">
-      <ul class="list">
-        <li class="title"><i class="iconfont icon-zhankai"></i>我的群聊</li>
-        <li class="item">
+      <ul v-for="(lists, n) in groupList" :key="n" :class="['list', lists.show ? '' : 'list-hide']">
+        <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
+        <li @click="choose(2, n, m, item.id)" v-for="(item, m) in lists.list" :key="m" :class="['item', nowChoose[0] == 2 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '']">
           <div class="avatar">
             <img src="@/assets/avatar.png" alt="">
           </div>
           <div class="info">
-            <p class="nick">毁灭世界</p>
-            <p class="content">有新消息</p>
+            <p class="nick">{{include.group[item.id].nick}}</p>
+            <p class="content">{{item.lastMsg}}</p>
+          </div>
+          <div v-if="item.lastMsgNum" class="num">
+            <p>+{{item.lastMsgNum}}</p>
           </div>
         </li>
       </ul>
@@ -59,6 +87,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -72,110 +101,42 @@ export default {
           id: 0,
           name: '置顶',
           show: 1,
-          list: [
-            {
-              id: 0,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 1,
-              haveNewMessage: 1,
-              newMessageNum: 5
-            },
-            {
-              id: 1,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 1,
-              haveNewMessage: 0,
-              newMessageNum: 0
-            },
-            {
-              id: 2,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 0,
-              haveNewMessage: 1,
-              newMessageNum: 1
-            }
-          ]
+          list: []
         },
         {
           id: 1,
           name: '消息',
           show: 1,
-          list: [
-            {
-              id: 3,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 1,
-              haveNewMessage: 0,
-              newMessageNum: 0
-            },
-            {
-              id: 4,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 1,
-              haveNewMessage: 0,
-              newMessageNum: 0
-            },
-            {
-              id: 5,
-              nick: '陆陆侠',
-              newMessage: '你好，在吗？',
-              online: 0,
-              haveNewMessage: 0,
-              newMessageNum: 0
-            }
-          ]
+          list: []
         }
       ],
       // 联系人列表
-      contactList: [
-        {
-          id: 0,
-          name: '特别关注',
-          show: 1,
-          list: [
-            {
-              id: 0,
-              nick: '陆陆侠',
-              icon: '🐟',
-              sign: '摸鱼中',
-              online: 1
-            }
-          ]
-        },
-        {
-          id: 1,
-          name: '我的好友',
-          show: 1,
-          list: [
-            {
-              id: 3,
-              nick: '陆陆侠',
-              icon: '🚶',
-              sign: '‍出行中',
-              online: 1
-            }
-          ]
-        }
-      ]
+      contactList: {},
+      // 群聊列表
+      groupList: {}
     }
   },
+  computed: {
+    ...mapState(['relationship', 'include'])
+  },
   methods: {
+    ...mapMutations(['showChat']),
     show (n) {
+      console.log(n)
       if (this.nowShow === 0) {
         this.messageList[n].show = !this.messageList[n].show
       } else if (this.nowShow === 1) {
         this.contactList[n].show = !this.contactList[n].show
+      } else if (this.nowShow === 2) {
+        this.groupList[n].show = !this.groupList[n].show
       }
     },
     showType (n) {
       this.nowShow = n
     },
-    choose (type, n, m) {
+    choose (type, n, m, id) {
+      console.log(id)
+      this.showChat(id)
       this.nowChoose = [type, n, m]
     },
     onUserMenu () {
@@ -191,6 +152,62 @@ export default {
         event
       })
     }
+  },
+  mounted () {
+    // 初始化关系表
+    const contactList = {}
+    const groupList = {}
+    this.relationship.forEach(item => {
+      // 初始化消息列表
+      if (item.inchat) {
+        if (item.top) {
+          this.messageList[0].list.push({
+            id: item.id,
+            type: item.type,
+            lastMsg: item.lastMsg,
+            lastMsgNum: item.lastMsgNum
+          })
+        } else {
+          this.messageList[1].list.push({
+            id: item.id,
+            type: item.type,
+            lastMsg: item.lastMsg,
+            lastMsgNum: item.lastMsgNum
+          })
+        }
+      }
+      // 初始化联系人
+      if (item.type === 'user') {
+        if (!contactList[item.groupId]) {
+          contactList[item.groupId] = {
+            name: item.group,
+            show: 1,
+            list: []
+          }
+        }
+        contactList[item.groupId].list.push({
+          id: item.id
+        })
+      } else {
+        // 初始化群组列表
+        if (!groupList[item.groupId]) {
+          groupList[item.groupId] = {
+            name: item.group,
+            show: 1,
+            list: []
+          }
+        }
+        groupList[item.groupId].list.push({
+          id: item.id,
+          lastMsg: item.lastMsg,
+          lastMsgNum: item.lastMsgNum
+        })
+      }
+    })
+    console.log(contactList)
+    console.log(groupList)
+    this.contactList = contactList
+    this.groupList = groupList
   }
 }
 </script>

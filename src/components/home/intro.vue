@@ -34,10 +34,8 @@ export default {
     justify-content: center
     align-items: center
     position: absolute
-    width: calc(100% - 14em)
-    height: 100vh
-    left: 14em
-    z-index: 1
+    width: 100%
+    height: 100%
     background: #fff
   .logo
     position: absolute

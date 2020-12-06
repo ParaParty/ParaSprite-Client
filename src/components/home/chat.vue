@@ -32,7 +32,7 @@ export default {
 <style lang="sass" scoped>
   @import "~@/assets/color.sass"
   .chat
-    width: calc(100% - 14em)
+    width: 100%
     height: 100%
   // 顶部栏
   .chat-title

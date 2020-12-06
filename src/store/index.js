@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     nowChatId: null,
+    // 存储聊天记录
     chatDB: {
       1: [
         {
@@ -24,10 +25,117 @@ export default new Vuex.Store({
           type: 'notice',
           content: '🎉 李亮亮 加入了群聊！'
         }
+      ],
+      2: [
+        {
+          type: 'message',
+          from: 1,
+          content: [
+            { type: 'text', content: '123' }
+          ]
+        }
       ]
-    }
+    },
+    // 存储id关联信息
+    include: {
+      user: {
+        1: {
+          nick: '槕纸喵',
+          avatar: 'avatar.png',
+          online: 0,
+          emoji: '🐟',
+          sign: '摸鱼中'
+        },
+        2: {
+          nick: '李亮亮',
+          avatar: 'avatar2.png',
+          online: 1,
+          emoji: '',
+          sign: ''
+        },
+        3: {
+          nick: '剑羽',
+          avatar: 'avatar2.png',
+          online: 1,
+          emoji: '',
+          sign: ''
+        }
+      },
+      group: {
+        1: {
+          nick: '我的世界',
+          avatar: 'avatar.png'
+        }
+      }
+    },
+    // 存储关系
+    relationship: [
+      /*
+        用户ID或群ID
+        状态
+        类型 | user/group
+        备注
+        分组名
+        分组排序
+        是否置顶
+        是否在消息列表
+        最后一条消息
+        未读消息数
+      */
+      {
+        id: 1,
+        status: 1,
+        type: 'user',
+        remark: '',
+        group: '特别关注',
+        groupId: 0,
+        top: 0,
+        inchat: 1,
+        lastMsg: '你好，在吗？',
+        lastMsgNum: 5
+      },
+      {
+        id: 2,
+        status: 1,
+        type: 'user',
+        remark: '',
+        group: '我的好友',
+        groupId: 1,
+        top: 1,
+        inchat: 1,
+        lastMsg: '你好，在吗？',
+        lastMsgNum: 5
+      },
+      {
+        id: 3,
+        status: 1,
+        type: 'user',
+        remark: '',
+        group: '我的好友',
+        groupId: 1,
+        top: 1,
+        inchat: 1,
+        lastMsg: '你好，在吗？',
+        lastMsgNum: 5
+      },
+      {
+        id: 1,
+        status: 1,
+        type: 'group',
+        remark: '',
+        group: '我的群聊',
+        groupId: 0,
+        top: 0,
+        inchat: 1,
+        lastMsg: '你好，在吗？',
+        lastMsgNum: 5
+      }
+    ]
   },
   mutations: {
+    showChat (state, id) {
+      state.nowChatId = id
+    }
   },
   actions: {
   },

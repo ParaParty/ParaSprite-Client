@@ -5,6 +5,7 @@ import store from './store'
 import Contextmenu from 'vue-contextmenujs'
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
+import _ from 'lodash'
 // import VueSocketIO from 'vue-socket.io'
 // import SocketIO from 'socket.io-client'
 // Vue.use(new VueSocketIO({
@@ -13,6 +14,7 @@ import 'viewerjs/dist/viewer.css'
 // }))
 Vue.use(Contextmenu)
 Vue.use(Viewer)
+Vue.prototype._ = _
 
 Vue.config.productionTip = false
 

@@ -1,8 +1,12 @@
 <template>
   <div class="home">
     <contact/>
-    <chat/>
-    <intro/>
+    <div class="content">
+      <transition name="show">
+        <chat v-if="nowChatId"/>
+      </transition>
+      <intro/>
+    </div>
     <chatInfo/>
   </div>
 </template>
@@ -12,6 +16,7 @@ import contact from '@/components/home/contact.vue'
 import chat from '@/components/home/chat.vue'
 import intro from '@/components/home/intro.vue'
 import chatInfo from '@/components/home/chatInfo.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
@@ -20,6 +25,9 @@ export default {
     chat,
     intro,
     chatInfo
+  },
+  computed: {
+    ...mapState(['nowChatId'])
   }
 }
 </script>
@@ -29,4 +37,14 @@ export default {
     display: flex
     width: calc(100% - 4em)
     height: 100vh
+  .content
+    width: calc(100% - 14em)
+  // 聊天窗口过渡
+  .show-enter-active, .show-leave-active
+    transition: all .3s
+  .show-enter, .show-leave-to
+    z-index: 1
+    left: 0
+    transform: translate(-1em, 0)
+    opacity: 0
 </style>
