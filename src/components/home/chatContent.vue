@@ -54,7 +54,7 @@
             <span class="send-time">9:23</span>
           </li>
           <li>
-            <p>你好，在吗？</p>
+            <p>你好，在吗？<emoji :data="emojiIndex" set="twitter" emoji=":grinning:" :size="20" /></p>
             <span class="send-time">9:23</span>
           </li>
           <li @click="showPic">
@@ -92,7 +92,17 @@
 <script>
 import { ipcRenderer } from 'electron'
 import { mapState } from 'vuex'
+import data from 'emoji-mart-vue-fast/data/all.json'
+import { Emoji, EmojiIndex } from 'emoji-mart-vue-fast'
 export default {
+  components: {
+    Emoji
+  },
+  data () {
+    return {
+      emojiIndex: new EmojiIndex(data)
+    }
+  },
   computed: {
     ...mapState(['id', 'nowChatId', 'nowChatType', 'chatDB', 'include'])
   },
@@ -215,4 +225,7 @@ export default {
     color: var(--text)
   .time-today p
     color: var(--main)
+  .emoji-mart-emoji
+    vertical-align: sub
+    padding: 0
 </style>
