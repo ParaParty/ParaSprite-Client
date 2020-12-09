@@ -2,7 +2,7 @@
   <div class="chat">
     <div class="chat-title">
       <i class="iconfont icon-xiaoxi"></i>
-      <h1>陆陆侠</h1>
+      <h1>{{nowChatType == 'user' ? include.user[nowChatId].nick : include.group[nowChatId].nick}}</h1>
     </div>
     <chatContent ref="chat"/>
     <editor/>
@@ -10,12 +10,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import chatContent from '@/components/home/chatContent.vue'
 import editor from '@/components/home/editor.vue'
 export default {
   components: {
     chatContent,
     editor
+  },
+  computed: {
+    ...mapState(['nowChatType', 'nowChatId', 'include'])
   },
   sockets: {
     // 测试发送

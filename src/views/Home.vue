@@ -2,7 +2,7 @@
   <div class="home">
     <contact/>
     <div class="content">
-      <transition name="show">
+      <transition name="chat">
         <chat v-if="nowChatId"/>
       </transition>
       <intro/>
@@ -40,9 +40,9 @@ export default {
   .content
     width: calc(100% - 14em)
   // 聊天窗口过渡
-  .show-enter-active, .show-leave-active
+  .chat-enter-active, .chat-leave-active
     transition: all .3s
-  .show-enter, .show-leave-to
+  .chat-enter, .chat-leave-to
     z-index: 1
     left: 0
     transform: translate(-1em, 0)

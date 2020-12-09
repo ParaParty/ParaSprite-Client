@@ -13,7 +13,7 @@
           {{lists.name}}
         </li>
         <li @contextmenu.prevent='onUserMenu'
-            @click="choose(0, n, m, item.id)"
+            @click="choose(0, n, m, item.id, item.type)"
             v-for="(item, m) in lists.list"
             :key="item.type + item.id"
             :class="[
@@ -42,7 +42,7 @@
     <div :style="{transform: 'translate(' + (0.5 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 1 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in contactList" :key="lists.id" :class="['list', lists.show ? '' : 'list-hide']">
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @click="choose(1, n, m, item.id)"
+        <li @click="choose(1, n, m, item.id, 'user')"
           v-for="(item, m) in lists.list"
           :key="item.id"
           :class="[
@@ -69,7 +69,7 @@
     <div :style="{transform: 'translate(' + (1 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 2 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in groupList" :key="n" :class="['list', lists.show ? '' : 'list-hide']">
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @click="choose(2, n, m, item.id)" v-for="(item, m) in lists.list" :key="m" :class="['item', nowChoose[0] == 2 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '']">
+        <li @click="choose(2, n, m, item.id, 'group')" v-for="(item, m) in lists.list" :key="m" :class="['item', nowChoose[0] == 2 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '']">
           <div class="avatar">
             <img src="@/assets/avatar.png" alt="">
           </div>
@@ -134,10 +134,13 @@ export default {
     showType (n) {
       this.nowShow = n
     },
-    choose (type, n, m, id) {
+    choose (list, n, m, id, type) {
       console.log(id)
-      this.showChat(id)
-      this.nowChoose = [type, n, m]
+      this.showChat({
+        id: id,
+        type: type
+      })
+      this.nowChoose = [list, n, m]
     },
     onUserMenu () {
       this.$contextmenu({
@@ -275,6 +278,7 @@ export default {
     font-size: 0.8em
     margin-bottom: 0.5em
     backdrop-filter: blur(5px)
+    border-radius: 0.2em
     z-index: 1
     cursor: pointer
     i

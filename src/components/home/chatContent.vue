@@ -1,47 +1,67 @@
 <template>
   <ul class="chat-content">
-    <li class="notice">
-      <p>2020年11月22日</p>
-    </li>
-    <li>
-      <div class="avatar">
+    <li>{{nowChatType + ' ' + nowChatId}}</li>
+    <li v-for="(msg, index) in chatDB[nowChatType][nowChatId]" :key="index" :class="getClass(msg)">
+      <!-- 提示信息 -->
+      <p v-if="msg.type != 'message'">
+        {{msg.content}}
+      </p>
+      <!-- 头像 -->
+      <div v-if="msg.type == 'message'" class="avatar">
         <img src="@/assets/avatar.png" alt="">
       </div>
-      <div class="content">
-        <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>嘿嘿！<span class="send-time">9:23</span></p>
-          <p>你好，在吗？<span class="send-time">9:23</span></p>
-          <p @click="showPic">
-            <img src="@/assets/avatar2.png" alt="">
-            <span class="send-time">9:24</span>
-          </p>
-        </div>
+      <!-- 内容 -->
+      <div v-if="msg.type == 'message'" class="content">
+        <!-- 昵称 -->
+        <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[nowChatId].nick}}</h2>
+        <!-- 聊天内容 -->
+        <ul class="message">
+          <li v-for="(item, index) in msg.content" :key="index">
+            <!-- 文本 -->
+            <p v-if="item.type == 'text'">{{item.content}}</p>
+            <!-- 图片 -->
+            <img v-else-if="item.type == 'img'" @click="showPic" src="@/assets/avatar2.png" alt="">
+            <!-- 发送时间 -->
+            <span class="send-time">time</span>
+          </li>
+        </ul>
       </div>
     </li>
-    <li class="right">
-      <div class="avatar">
-        <img src="@/assets/avatar2.png" alt="">
-      </div>
-      <div class="content">
-        <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>你好，在的！<span class="send-time">9:24</span></p>
-        </div>
-      </div>
+    <li class="notice">
+      <p>静态测试</p>
+    </li>
+    <li class="notice">
+      <p>2020年11月22日</p>
     </li>
     <li class="notice time-today">
       <p>2020年11月23日</p>
     </li>
+    <li class="notice">
+      <p>🎉 李亮亮 加入了群聊！</p>
+    </li>
+    <li class="notice">
+      <p>😥 李亮亮 退出了群聊！</p>
+    </li>
     <li>
       <div class="avatar">
         <img src="@/assets/avatar.png" alt="">
       </div>
       <div class="content">
         <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>啊哈，我说贝蒂莉亚，你不是说要去我的院子里去玩吗？<span class="send-time">10:31</span></p>
-        </div>
+        <ul class="message">
+          <li>
+            <p>嘿嘿！</p>
+            <span class="send-time">9:23</span>
+          </li>
+          <li>
+            <p>你好，在吗？</p>
+            <span class="send-time">9:23</span>
+          </li>
+          <li @click="showPic">
+            <img src="@/assets/avatar2.png" alt="">
+            <span class="send-time">9:24</span>
+          </li>
+        </ul>
       </div>
     </li>
     <li class="right">
@@ -50,51 +70,45 @@
       </div>
       <div class="content">
         <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>可不是嘛，麦克！不过你得先给我买杯🐱尿~<span class="send-time">10:32</span></p>
-        </div>
+        <ul class="message">
+          <li>
+            <p>嘿嘿！</p>
+            <span class="send-time">9:23</span>
+          </li>
+          <li>
+            <p>你好，在吗？</p>
+            <span class="send-time">9:23</span>
+          </li>
+          <li @click="showPic">
+            <img src="@/assets/avatar2.png" alt="">
+            <span class="send-time">9:24</span>
+          </li>
+        </ul>
       </div>
-    </li>
-    <li>
-      <div class="avatar">
-        <img src="@/assets/avatar.png" alt="">
-      </div>
-      <div class="content">
-        <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>老张开车去东北~~~<span class="send-time">10:34</span></p>
-          <p>撞了。<span class="send-time">10:34</span></p>
-          <p>肇事司机耍流氓~~~<span class="send-time">10:34</span></p>
-          <p>跑了。<span class="send-time">10:35</span></p>
-        </div>
-      </div>
-    </li>
-    <li class="notice">
-      <p>🎉 李亮亮 加入了群聊！</p>
-    </li>
-    <li class="right">
-      <div class="avatar">
-        <img src="@/assets/avatar.png" alt="">
-      </div>
-      <div class="content">
-        <h2 class="nick">陆陆侠</h2>
-        <div class="message">
-          <p>测试发送<span class="send-time">10:35</span></p>
-        </div>
-      </div>
-    </li>
-    <li class="notice">
-      <p>😥 李亮亮 退出了群聊！</p>
     </li>
   </ul>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['id', 'nowChatId', 'nowChatType', 'chatDB', 'include'])
+  },
   methods: {
     showPic () {
       ipcRenderer.send('showPic')
+    },
+    getClass (msg) {
+      const type = []
+      if (['notice', 'time'].includes(msg.type)) {
+        type.push('notice')
+      }
+      if (msg.from === this.id) {
+        type.push('right')
+      }
+      return type
     }
   }
 }
@@ -157,9 +171,9 @@ export default {
     padding: 0.25em
     background: var(--block-bg)
     margin-top: 0.2em
-    border-radius: 0 0.5em 0.5em 0.5em
+    border-radius: 0.2em
     color: var(--text)
-    p
+    li
       padding: 0.25em
       img
         max-height: 10em
@@ -188,7 +202,6 @@ export default {
     .nick
       text-align: right
     .message
-      border-radius: 0.5em 0 0.5em 0.5em
       background: var(--main)
       color: var(--bg)
     .send-time

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="light-theme">
+  <div id="app">
     <titleBar/>
     <sidebar/>
     <transition name="show">
@@ -17,6 +17,7 @@ export default {
     sidebar
   },
   mounted () {
+    document.body.classList.add('light-theme')
     // fetch('http://localhost:8888/echo/test')
     //   .then(function (response) {
     //     return response.json()
@@ -40,6 +41,7 @@ export default {
     padding: 0
   body
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.1)
+    // font-family: "PingFang SC"
   #app
     display: flex
     background: var(--bg)
@@ -102,11 +104,11 @@ export default {
     --text: rgba(0, 0, 0, 0.7)
     --main: #ea5089
   .dark-theme
-    --bg: #fff
-    --block-bg: #f5f5f5
-    --hover-bg: #eee
-    --active-bg: #ddd
-    --dark: rgba(0, 0, 0, 0.5)
-    --text: rgba(0, 0, 0, 0.7)
+    --bg: #06090f
+    --block-bg: #0d1117
+    --hover-bg: #30363d
+    --active-bg: #21262d
+    --dark: rgba(255, 255, 255, 0.5)
+    --text: rgb(201, 209, 217)
     --main: #ea5089
 </style>

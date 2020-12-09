@@ -5,36 +5,59 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    id: 0,
     nowChatId: null,
+    nowChatType: null,
     // 存储聊天记录
     chatDB: {
-      1: [
-        {
-          type: 'message',
-          from: 1,
-          content: [
-            { type: 'text', content: '你好' },
-            { type: 'img', content: 'avatar.png' }
-          ]
-        },
-        {
-          type: 'time',
-          time: '10:59'
-        },
-        {
-          type: 'notice',
-          content: '🎉 李亮亮 加入了群聊！'
-        }
-      ],
-      2: [
-        {
-          type: 'message',
-          from: 1,
-          content: [
-            { type: 'text', content: '123' }
-          ]
-        }
-      ]
+      user: {
+        1: [
+          {
+            type: 'message',
+            from: 1,
+            content: [
+              { type: 'text', content: '你好' },
+              { type: 'img', content: 'avatar.png' }
+            ]
+          },
+          {
+            type: 'time',
+            content: '10:59'
+          },
+          {
+            type: 'notice',
+            content: '🎉 李亮亮 加入了群聊！'
+          },
+          {
+            type: 'message',
+            from: 0,
+            content: [
+              { type: 'text', content: '不出意外这条信息应该是我发的' }
+            ]
+          }
+        ],
+        2: [
+          {
+            type: 'message',
+            from: 1,
+            content: [
+              { type: 'text', content: '123' }
+            ]
+          }
+        ]
+      },
+      group: {
+        1: [
+          {
+            type: 'message',
+            from: 1,
+            content: [
+              { type: 'text', content: '你好' },
+              { type: 'img', content: 'avatar.png' }
+            ]
+          }
+        ]
+      }
     },
     // 存储id关联信息
     include: {
@@ -58,7 +81,7 @@ export default new Vuex.Store({
           avatar: 'avatar2.png',
           online: 1,
           emoji: '',
-          sign: ''
+          sign: '该健身了！'
         }
       },
       group: {
@@ -133,8 +156,9 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    showChat (state, id) {
-      state.nowChatId = id
+    showChat (state, payload) {
+      state.nowChatId = payload.id
+      state.nowChatType = payload.type
     }
   },
   actions: {

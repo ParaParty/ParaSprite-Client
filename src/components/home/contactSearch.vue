@@ -70,6 +70,7 @@ input
   width: 100%
   border: 1px solid transparent
   border-radius: 0.2em
+  background: var(--bg)
   transition: border 0.3s
   -webkit-app-region: no-drag
   z-index: 2

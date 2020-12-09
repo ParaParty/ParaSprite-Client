@@ -109,6 +109,7 @@ ipcMain.on('showPic', e => {
 })
 // 关闭图片
 ipcMain.on('closePic', e => {
+  console.log(e)
   picWin.hide()
   picWin.close()
 })

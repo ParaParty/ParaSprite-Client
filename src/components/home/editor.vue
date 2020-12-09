@@ -46,12 +46,16 @@ export default {
       height: 2.5em
       outline: none
       padding: 0.5em
-      border: 1px solid #fff
+      border: 1px solid transparent
       border-radius: 0.2em
-      background: var(--block-bg)
+      background: rgba(245, 245, 245, 0.6)
       margin: 0px
       resize: none
       font-family: 'Microsoft Yahei'
+      backdrop-filter: blur(2px)
+      transition: border .3s
+      &:hover, &:focus
+        border: 1px solid var(--dark)
   .send
     display: flex
     justify-content: center
