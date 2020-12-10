@@ -62,13 +62,28 @@ export default {
       this.$forceUpdate()
     },
     selectEmoji (emoji) {
-      const input = document.querySelector('.input')
+      // 获取光标
+      const selection = document.getSelection()
+      // 创建表情
       let code = emoji.unified
       if (code.slice(-5) === '-fe0f' && code.length < 11) {
         code = code.slice(0, -5)
       }
-      input.insertAdjacentHTML('beforeend', `<img class="emoji" draggable="false" alt="${emoji.native}" src="/emoji/${code}.svg">`)
-      console.log(code)
+      const img = document.createElement('img')
+      img.src = `/emoji/${code}.svg`
+      img.classList.add('emoji')
+      img.draggable = false
+      img.alt = `${emoji.native}`
+      // 当前选中了内容
+      if (selection.anchorNode) {
+        const range = selection.getRangeAt(0)
+        range.insertNode(img)
+        range.collapse(0)
+      } else {
+        // 当前未选中内容
+        const input = document.querySelector('.input')
+        input.append(img)
+      }
     }
   },
   mounted () {
