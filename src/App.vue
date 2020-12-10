@@ -102,13 +102,17 @@ export default {
     --active-bg: #ddd
     --dark: rgba(0, 0, 0, 0.5)
     --text: rgba(0, 0, 0, 0.7)
+    --text-right: rgba(0, 0, 0, 0.7)
     --main: #ea5089
+    --input: rgba(245, 245, 245, 0.6)
   .dark-theme
-    --bg: #06090f
-    --block-bg: #0d1117
+    --bg: #0d1117
+    --block-bg: #161b22
     --hover-bg: #30363d
     --active-bg: #21262d
     --dark: rgba(255, 255, 255, 0.5)
     --text: rgb(201, 209, 217)
+    --text-right: #fff
     --main: #ea5089
+    --input: rgba(22, 27, 34, 0.6)
 </style>

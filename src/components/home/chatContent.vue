@@ -214,11 +214,11 @@ export default {
       text-align: right
     .message
       background: var(--main)
-      color: var(--bg)
+      color: var(--text-right)
     .send-time
       left: inherit !important
       right: calc(100% + 1em)
-      color: rgba(0, 0, 0, 0.7)
+      color: var(--text)
   // 消息时间
   .notice p
     margin: 0 auto

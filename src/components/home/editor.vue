@@ -126,7 +126,8 @@ export default {
       padding: 0.5em
       border: 1px solid transparent
       border-radius: 0.2em
-      background: rgba(245, 245, 245, 0.6)
+      color: var(--text)
+      background: var(--input)
       backdrop-filter: blur(2px)
       transition: border .3s
       overflow-y: auto
