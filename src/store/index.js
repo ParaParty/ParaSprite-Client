@@ -62,6 +62,13 @@ export default new Vuex.Store({
     // 存储id关联信息
     include: {
       user: {
+        0: {
+          nick: '陆陆侠',
+          avatar: 'avatar2.png',
+          online: 0,
+          emoji: '📢',
+          sign: 'SB————'
+        },
         1: {
           nick: '槕纸喵',
           avatar: 'avatar.png',
@@ -159,6 +166,20 @@ export default new Vuex.Store({
     showChat (state, payload) {
       state.nowChatId = payload.id
       state.nowChatType = payload.type
+    },
+    sendMsg (state, payload) {
+      const chat = state.chatDB[state.nowChatType][state.nowChatId]
+      if (chat.slice(-1)[0].from === state.id) {
+        chat[chat.length - 1].content.push({ type: 'text', content: payload })
+      } else {
+        state.chatDB[state.nowChatType][state.nowChatId].push({
+          type: 'message',
+          from: state.id,
+          content: [
+            { type: 'text', content: payload }
+          ]
+        })
+      }
     }
   },
   actions: {

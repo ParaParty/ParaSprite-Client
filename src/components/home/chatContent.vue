@@ -13,12 +13,12 @@
       <!-- 内容 -->
       <div v-if="msg.type == 'message'" class="content">
         <!-- 昵称 -->
-        <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[nowChatId].nick}}</h2>
+        <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[msg.from].nick}}</h2>
         <!-- 聊天内容 -->
         <ul class="message">
           <li v-for="(item, index) in msg.content" :key="index">
             <!-- 文本 -->
-            <p v-if="item.type == 'text'">{{item.content}}</p>
+            <p v-if="item.type == 'text'" v-html="item.content"></p>
             <!-- 图片 -->
             <img v-else-if="item.type == 'img'" @click="showPic" src="@/assets/avatar2.png" alt="">
             <!-- 发送时间 -->
@@ -54,7 +54,7 @@
             <span class="send-time">9:23</span>
           </li>
           <li>
-            <p>你好，在吗？<emoji :data="emojiIndex" set="twitter" emoji=":grinning:" :size="20" /></p>
+            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.svg" alt="😀"></p>
             <span class="send-time">9:23</span>
           </li>
           <li @click="showPic">
@@ -76,7 +76,7 @@
             <span class="send-time">9:23</span>
           </li>
           <li>
-            <p>你好，在吗？</p>
+            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.svg" alt="😀"></p>
             <span class="send-time">9:23</span>
           </li>
           <li @click="showPic">
@@ -93,11 +93,8 @@
 import { ipcRenderer } from 'electron'
 import { mapState } from 'vuex'
 import data from 'emoji-mart-vue-fast/data/all.json'
-import { Emoji, EmojiIndex } from 'emoji-mart-vue-fast'
+import { EmojiIndex } from 'emoji-mart-vue-fast'
 export default {
-  components: {
-    Emoji
-  },
   data () {
     return {
       emojiIndex: new EmojiIndex(data)
@@ -185,6 +182,10 @@ export default {
     color: var(--text)
     li
       padding: 0.25em
+      ::v-deep .emoji
+        width: 1.2em
+        height: 1.2em
+        vertical-align: sub
       img
         max-height: 10em
         border-radius: 0.2em
@@ -214,6 +215,9 @@ export default {
     .message
       background: var(--main)
       color: var(--bg)
+      p
+        width: 100%
+        text-align: right
     .send-time
       left: inherit !important
       right: calc(100% + 1em)

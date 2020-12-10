@@ -1,11 +1,13 @@
 <template>
   <div class="editor">
-    <StaticPicker :data="emojiIndex" title="表情…" emoji="grinning" color="var(--dark)" perLine="8" :i18n="emojii18n" set="twitter" id="picker" />
+    <StaticPicker @select="selectEmoji" :data="emojiIndex" title="表情…" emoji="grinning" color="var(--dark)" :i18n="emojii18n" set="twitter" id="picker" />
     <div class="content">
       <a class="emoji">
-        <emoji :data="emojiIndex" set="twitter" emoji=":grinning:" :size="22" />
+        <img src="/emoji/1f600.svg" alt="">
       </a>
-      <textarea v-model="input" name="" id=""></textarea>
+      <div class="input">
+      </div>
+      <!-- <textarea v-model="input" name="" id="input"></textarea> -->
     </div>
     <a @click="send" class="send">
       <i class="iconfont icon-send"></i>
@@ -14,16 +16,19 @@
 </template>
 
 <script>
+// 导入提示组件
 import tippy from 'tippy.js'
 import 'tippy.js/animations/scale.css'
 // import 'tippy.js/dist/tippy.css'
+// 导入表情组件
 import data from 'emoji-mart-vue-fast/data/all.json'
-import { Emoji, StaticPicker, EmojiIndex } from 'emoji-mart-vue-fast'
+import { StaticPicker, EmojiIndex } from 'emoji-mart-vue-fast'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
+// 导入vuex
+import { mapMutations } from 'vuex'
 export default {
   components: {
-    StaticPicker,
-    Emoji
+    StaticPicker
   },
   data () {
     return {
@@ -45,13 +50,25 @@ export default {
           flags: '国旗',
           custom: '自定义'
         }
-      },
-      input: ''
+      }
     }
   },
   methods: {
+    ...mapMutations(['sendMsg']),
     send () {
-      this.$socket.emit('message', this.input)
+      // this.$socket.emit('message', this.input)
+      const payload = document.querySelector('.input').innerHTML
+      this.sendMsg(payload)
+      this.$forceUpdate()
+    },
+    selectEmoji (emoji) {
+      const input = document.querySelector('.input')
+      let code = emoji.unified
+      if (code.slice(-5) === '-fe0f' && code.length < 11) {
+        code = code.slice(0, -5)
+      }
+      input.insertAdjacentHTML('beforeend', `<img class="emoji" draggable="false" alt="${emoji.native}" src="/emoji/${code}.svg">`)
+      console.log(code)
     }
   },
   mounted () {
@@ -67,7 +84,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
   .editor
     display: flex
     align-items: flex-end
@@ -79,26 +95,37 @@ export default {
     padding: 1em
     background: linear-gradient(to top, var(--bg), transparent)
     width: calc(100% - 0.2em)
+    font-family: emoji
   .content
     display: flex
     width: 100%
-    height: 2em
+    height: 2.4em
     align-items: center
-    textarea
+    .input
+      position: absolute
+      bottom: 0
       width: 100%
-      height: 2.5em
+      height: fit-content
+      max-height: 5em
       outline: none
       padding: 0.5em
       border: 1px solid transparent
       border-radius: 0.2em
       background: rgba(245, 245, 245, 0.6)
-      margin: 0px
-      resize: none
-      font-family: 'Microsoft Yahei'
       backdrop-filter: blur(2px)
       transition: border .3s
+      overflow-y: auto
+      -webkit-user-modify: read-write
+      &::-webkit-scrollbar
+        width: 4px
+      &::-webkit-scrollbar-thumb
+        background: rgba(0, 0, 0, 0.2)
       &:hover, &:focus
         border: 1px solid var(--dark)
+      ::v-deep .emoji
+        width: 1.3em
+        height: 1.3em
+        vertical-align: sub
     ::v-deep .tippy-box
       outline: none
   .send
@@ -106,8 +133,8 @@ export default {
     justify-content: center
     align-items: center
     background: #45c31c
-    width: 4em
-    height: 2em
+    width: 2.6em
+    height: 2.4em
     border-radius: 0.2em
     margin-left: 0.5em
     color: #fff
@@ -115,13 +142,16 @@ export default {
     position: absolute
     z-index: 1
     right: 0.5rem
-    font-size: 1.2em
+    height: 1.5em
     filter: grayscale(1)
     opacity: 0.5
     transition: filter .3s, opacity .3s
     &:hover
       filter: grayscale(0) !important
       opacity: 1 !important
+    img
+      width: 1.5em
+      height: 1.5em
   #picker ::v-deep
     width: 306px !important
     .emoji-mart-search
