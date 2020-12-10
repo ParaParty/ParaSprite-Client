@@ -215,9 +215,6 @@ export default {
     .message
       background: var(--main)
       color: var(--bg)
-      p
-        width: 100%
-        text-align: right
     .send-time
       left: inherit !important
       right: calc(100% + 1em)
