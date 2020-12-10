@@ -102,7 +102,7 @@ export default {
     --active-bg: #ddd
     --dark: rgba(0, 0, 0, 0.5)
     --text: rgba(0, 0, 0, 0.7)
-    --text-right: rgba(0, 0, 0, 0.7)
+    --text-right: #fff
     --main: #ea5089
     --input: rgba(245, 245, 245, 0.6)
   .dark-theme

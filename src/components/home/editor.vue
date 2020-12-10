@@ -62,6 +62,9 @@ export default {
       this.$forceUpdate()
     },
     selectEmoji (emoji) {
+      // 聚焦输入框
+      const input = document.querySelector('.input')
+      input.focus()
       // 获取光标
       const selection = document.getSelection()
       // 创建表情
@@ -81,7 +84,6 @@ export default {
         range.collapse(0)
       } else {
         // 当前未选中内容
-        const input = document.querySelector('.input')
         input.append(img)
       }
     }
@@ -154,6 +156,11 @@ export default {
     border-radius: 0.2em
     margin-left: 0.5em
     color: #fff
+    cursor: pointer
+    &:hover i
+        transform: scale(1.5)
+    i
+      transition: transform 0.3s
   .emoji
     position: absolute
     z-index: 1
@@ -162,6 +169,7 @@ export default {
     filter: grayscale(1)
     opacity: 0.5
     transition: filter .3s, opacity .3s
+    cursor: pointer
     &:hover
       filter: grayscale(0) !important
       opacity: 1 !important
@@ -170,6 +178,8 @@ export default {
       height: 1.5em
   #picker ::v-deep
     width: 306px !important
+    .emoji-mart-emoji, .emoji-type-image, .emoji-mart-anchor, .emoji-mart-skin-swatches
+      cursor: pointer
     .emoji-mart-search
       margin-top: 0.5em
       padding: 0 0.5em
