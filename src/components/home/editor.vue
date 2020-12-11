@@ -5,7 +5,7 @@
       <a class="emoji">
         <img src="/emoji/1f600.svg" alt="">
       </a>
-      <div class="input">
+      <div @keydown.enter="inputKeydown($event)" class="input">
       </div>
       <!-- <textarea v-model="input" name="" id="input"></textarea> -->
     </div>
@@ -59,7 +59,17 @@ export default {
       // this.$socket.emit('message', this.input)
       const payload = document.querySelector('.input').innerHTML
       this.sendMsg(payload)
+      document.querySelector('.input').innerHTML = ''
       this.$forceUpdate()
+    },
+    // 监听按键操作
+    inputKeydown (event) {
+      // 如果没按shift
+      if (!event.shiftKey) {
+        this.send()
+        event.preventDefault()
+        return false
+      }
     },
     selectEmoji (emoji) {
       // 聚焦输入框
