@@ -78,12 +78,8 @@ export default {
       // 获取光标
       const selection = document.getSelection()
       // 创建表情
-      let code = emoji.unified
-      if (code.slice(-5) === '-fe0f' && code.length < 11) {
-        code = code.slice(0, -5)
-      }
       const img = document.createElement('img')
-      img.src = `/emoji/${code}.svg`
+      img.src = `/emoji/${emoji.unified}.png`
       img.classList.add('emoji')
       img.draggable = false
       img.alt = `${emoji.native}`
