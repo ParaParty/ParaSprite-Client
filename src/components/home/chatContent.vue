@@ -54,7 +54,7 @@
             <span class="send-time">9:23</span>
           </li>
           <li>
-            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.svg" alt="😀"></p>
+            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.png" alt="😀"></p>
             <span class="send-time">9:23</span>
           </li>
           <li @click="showPic">
@@ -76,7 +76,7 @@
             <span class="send-time">9:23</span>
           </li>
           <li>
-            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.svg" alt="😀"></p>
+            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.png" alt="😀"></p>
             <span class="send-time">9:23</span>
           </li>
           <li @click="showPic">

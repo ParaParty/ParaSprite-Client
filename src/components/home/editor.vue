@@ -3,7 +3,7 @@
     <StaticPicker @select="selectEmoji" :data="emojiIndex" title="表情…" emoji="grinning" color="var(--dark)" :i18n="emojii18n" set="twitter" id="picker" />
     <div class="content">
       <a class="emoji">
-        <img src="/emoji/1f600.svg" alt="">
+        <img src="/emoji/1f600.png" alt="">
       </a>
       <div @keydown.enter="inputKeydown($event)" class="input">
       </div>
@@ -117,12 +117,12 @@ export default {
     height: 5em
     padding: 1em
     background: linear-gradient(to top, var(--bg), transparent)
-    width: calc(100% - 0.2em)
+    width: 100%
     font-family: emoji
   .content
     display: flex
     width: 100%
-    height: 2.4em
+    height: 2.3em
     align-items: center
     .input
       position: absolute
@@ -157,8 +157,8 @@ export default {
     justify-content: center
     align-items: center
     background: #45c31c
-    width: 2.6em
-    height: 2.4em
+    width: 3em
+    height: 2.3em
     border-radius: 0.2em
     margin-left: 0.5em
     color: #fff
