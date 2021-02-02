@@ -17,7 +17,7 @@
     "core-js": "^3.6.5",
     "emoji-mart-vue-fast": "^7.0.7",
     "lodash": "^4.17.20",
-    "socket.io-client": "^3.0.3",
+    "socket.io-client": "^2.3.0",
     "tippy.js": "^6.2.7",
     "v-viewer": "^1.5.1",
     "vue": "^2.6.11",

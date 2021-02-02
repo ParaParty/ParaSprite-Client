@@ -8,12 +8,12 @@ import 'viewerjs/dist/viewer.css'
 import _ from 'lodash'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-// import VueSocketIO from 'vue-socket.io'
-// import SocketIO from 'socket.io-client'
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: SocketIO('localhost:8888')
-// }))
+import VueSocketIO from 'vue-socket.io'
+import SocketIO from 'socket.io-client'
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: SocketIO('localhost:7001')
+}))
 Vue.use(Contextmenu)
 Vue.use(Viewer)
 Vue.use(VueAxios, axios)

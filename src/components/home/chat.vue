@@ -20,15 +20,6 @@ export default {
   },
   computed: {
     ...mapState(['nowChatType', 'nowChatId', 'include'])
-  },
-  sockets: {
-    // 测试发送
-    message (msg) {
-      console.log(msg)
-      this.$nextTick(() => {
-        this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
-      })
-    }
   }
 }
 </script>

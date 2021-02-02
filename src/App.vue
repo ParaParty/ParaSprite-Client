@@ -16,6 +16,11 @@ export default {
     titleBar,
     sidebar
   },
+  sockets: {
+    res (data) {
+      console.log(data)
+    }
+  },
   mounted () {
     document.body.classList.add('light-theme')
     // fetch('http://localhost:8888/echo/test')
@@ -25,9 +30,6 @@ export default {
     //   .then(function (myJson) {
     //     console.log(myJson)
     //   })
-    // this.$socket.emit('my other event', {
-    //   abc: 123
-    // })
   }
 }
 </script>

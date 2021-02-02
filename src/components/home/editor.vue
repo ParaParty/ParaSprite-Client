@@ -56,7 +56,7 @@ export default {
   methods: {
     ...mapMutations(['sendMsg']),
     send () {
-      // this.$socket.emit('message', this.input)
+      this.$socket.emit('chat', { test: '123' })
       const payload = document.querySelector('.input').innerHTML
       this.sendMsg(payload)
       document.querySelector('.input').innerHTML = ''
