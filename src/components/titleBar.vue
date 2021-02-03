@@ -25,11 +25,7 @@ export default {
       ipcRenderer.send('maximize')
     },
     close () {
-      if (this.$route.name === 'PicViewer') {
-        ipcRenderer.send('closePic')
-      } else {
-        ipcRenderer.send('close')
-      }
+      ipcRenderer.send('close')
     }
   }
 }

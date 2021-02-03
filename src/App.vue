@@ -49,6 +49,7 @@ export default {
     background: var(--bg)
     user-select: none
     overflow: hidden
+    height: 100vh
     // filter: invert(1) hue-rotate(180deg)
   i
     text-shadow: none

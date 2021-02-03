@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    id: 0,
+    id: '',
     nowChatId: null,
     nowChatType: null,
     // 存储聊天记录
@@ -180,6 +180,9 @@ export default new Vuex.Store({
           ]
         })
       }
+    },
+    setId (state, payload) {
+      state.id = payload
     }
   },
   actions: {

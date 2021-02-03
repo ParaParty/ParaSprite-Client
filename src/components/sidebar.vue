@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.name != 'PicViewer'" class="sidebar">
+  <div v-if="['login', 'home'].includes($route.name)" class="sidebar">
     <ul class="menu">
       <li class="active">
         <i class="iconfont icon-shouye"></i>

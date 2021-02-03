@@ -86,10 +86,11 @@ if (isDevelopment) {
 
 // 最小化
 ipcMain.on('minimize', e => {
-  win.minimize()
+  BrowserWindow.getFocusedWindow().minimize()
 })
 // 最大化
 ipcMain.on('maximize', e => {
+  const win = BrowserWindow.getFocusedWindow()
   if (win.isMaximized()) {
     win.restore()
   } else {
@@ -97,8 +98,8 @@ ipcMain.on('maximize', e => {
   }
 })
 // 关闭
-ipcMain.on('close', e => {
-  win.close()
+ipcMain.on('close', () => {
+  BrowserWindow.getFocusedWindow().close()
 })
 // 展示图片
 let picWin
@@ -107,12 +108,6 @@ ipcMain.on('showPic', e => {
   // picWin.show()
   showPic()
   picWin.show()
-})
-// 关闭图片
-ipcMain.on('closePic', e => {
-  console.log(e)
-  picWin.hide()
-  picWin.close()
 })
 function showPic () {
   picWin = new BrowserWindow({
@@ -129,3 +124,19 @@ function showPic () {
     picWin = null
   })
 }
+//视频
+ipcMain.on('showVideo', e => {
+  let videoWin = new BrowserWindow({
+    width: 800,
+    height: 600,
+    frame: false,
+    // show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  videoWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/video')
+  videoWin.on('closed', () => {
+    videoWin = null
+  })
+})

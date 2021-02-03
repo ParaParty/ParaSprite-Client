@@ -2,9 +2,14 @@
   <div class="editor">
     <StaticPicker @select="selectEmoji" :data="emojiIndex" title="表情…" emoji="grinning" color="var(--dark)" :i18n="emojii18n" set="twitter" id="picker" />
     <div class="content">
-      <a class="emoji">
-        <img src="/emoji/1f600.png" alt="">
-      </a>
+      <div class="icon">
+        <a @click="showVideo" class="more">
+          <img src="@/assets/img/more.svg" alt="">
+        </a>
+        <a class="emoji">
+          <img src="/emoji/1f600.png" alt="">
+        </a>
+      </div>
       <div @keydown.enter="inputKeydown($event)" class="input">
       </div>
       <!-- <textarea v-model="input" name="" id="input"></textarea> -->
@@ -16,6 +21,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 // 导入提示组件
 import tippy from 'tippy.js'
 import 'tippy.js/animations/scale.css'
@@ -92,6 +98,9 @@ export default {
         // 当前未选中内容
         input.append(img)
       }
+    },
+    showVideo () {
+      ipcRenderer.send('showVideo')
     }
   },
   mounted () {
@@ -167,21 +176,23 @@ export default {
         transform: scale(1.5)
     i
       transition: transform 0.3s
-  .emoji
+  .icon
     position: absolute
     z-index: 1
-    right: 0.5rem
+    right: 0
     height: 1.5em
-    filter: grayscale(1)
-    opacity: 0.5
-    transition: filter .3s, opacity .3s
-    cursor: pointer
-    &:hover
-      filter: grayscale(0) !important
-      opacity: 1 !important
-    img
-      width: 1.5em
-      height: 1.5em
+    a
+      filter: grayscale(1)
+      margin-right: 0.5rem
+      opacity: 0.5
+      transition: filter .3s, opacity .3s
+      cursor: pointer
+      img
+        width: 1.5em
+        height: 1.5em
+      &:hover
+        filter: grayscale(0) !important
+        opacity: 1 !important
   #picker ::v-deep
     width: 306px !important
     .emoji-mart-emoji, .emoji-type-image, .emoji-mart-anchor, .emoji-mart-skin-swatches

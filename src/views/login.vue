@@ -54,12 +54,12 @@
       <div class="user-card">
         <input @change="avatarUpload" type="file" accept="image/png,image/jpeg" ref="avatar" class="avatar-upload">
         <div @click="avatarSelect" :class="[registerForm.avatar ? 'avatar-active' : '', 'avatar']">
-          <img v-if="registerForm.avatar" :src="'http://127.0.0.1:8888/public/uploads/' + registerForm.avatar" alt="">
+          <img v-if="registerForm.avatar" :src="'http://127.0.0.1:7001/public/avatar/' + registerForm.avatar" alt="">
           <i class="iconfont icon-shangchuan"></i>
         </div>
         <input v-model="registerForm.nick" placeholder="昵称……" class="nick" type="text">
       </div>
-      <div @click="register" class="btn">
+      <div @click="changeNick" class="btn">
         <p>完成</p>
       </div>
       <div class="tip">
@@ -71,10 +71,14 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 import logo from '@/components/logo.vue'
 export default {
   components: {
     logo
+  },
+  computed: {
+    ...mapState(['id'])
   },
   data () {
     return {
@@ -98,6 +102,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setId']),
     login () {
       this.$router.push('/home')
     },
@@ -131,15 +136,15 @@ export default {
         verify = 0
       }
       if (verify) {
-        this.axios.post('http://localhost:8888/user/register', {
+        this.axios.post('/api/users/new', {
           mail: this.registerForm.mail.content,
           password: this.registerForm.password.content
         }).then(res => {
-          if (res.data.code) {
-            this.type = 'complete'
-          } else {
-            this.registerForm.mail.error = ' - 这个邮箱已经被注册过了'
-          }
+          this.type = 'complete'
+          this.setId(res.data.id)
+        }).catch(err => {
+          console.log(err)
+          this.registerForm.mail.error = ' - 这个邮箱已经被注册过了'
         })
       }
     },
@@ -150,8 +155,15 @@ export default {
       const avatar = this.$refs.avatar.files[0]
       const data = new FormData()
       data.append('file', avatar)
-      this.axios.post('http://localhost:8888/api/img', data).then(res => {
-        this.registerForm.avatar = res.data
+      this.axios.post(`/api/users/${this.id}/avatar`, data).then(res => {
+        this.registerForm.avatar = res.data.url
+      })
+    },
+    changeNick () {
+      this.axios.post(`/api/users/${this.id}`, {
+        nick: this.registerForm.nick
+      }).then(res => {
+        this.$router.push('/home')
       })
     }
   }
