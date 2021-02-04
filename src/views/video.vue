@@ -9,16 +9,38 @@
 export default {
   mounted () {
     const localVideo = document.querySelector('#localVideo')
+    const remoteVideo = document.querySelector('#remoteVideo')
+    const servers = null
+    const localPeer = new RTCPeerConnection(servers)
+    const remotePeer = new RTCPeerConnection(servers)
+    localPeer.onicecandidate = e => {
+      console.log(e.candidate && e.candidate)
+      e.candidate && remotePeer.addIceCandidate(e.candidate)
+    }
+    remotePeer.onicecandidate = e => {
+      e.candidate && localPeer.addIceCandidate(e.candidate)
+    }
+    remotePeer.addEventListener('addstream', e => {
+      remoteVideo.srcObject = e.stream
+    })
+    // 获取本地视频流
     navigator.mediaDevices.getUserMedia({
       audio: false,
       video: true
     }).then(stream => {
-      // localStream = stream;
       localVideo.srcObject = stream
-      // sendMessage('got user media');
-      // if (isInitiator) {
-      //   maybeStart();
-      // }
+      localPeer.addStream(stream)
+      localPeer.createOffer({
+        offerToReceiveVideo: 1
+      }).then((description) => {
+        console.log(description)
+        localPeer.setLocalDescription(description)
+        remotePeer.setRemoteDescription(description)
+        remotePeer.createAnswer().then((description) => {
+          remotePeer.setLocalDescription(description)
+          localPeer.setRemoteDescription(description)
+        })
+      })
     })
   }
 }
