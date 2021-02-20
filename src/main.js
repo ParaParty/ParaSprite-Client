@@ -10,6 +10,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueSocketIO from 'vue-socket.io'
 import SocketIO from 'socket.io-client'
+import Toast from '@/components/toast'
 axios.defaults.baseURL = 'http://localhost:7001'
 Vue.use(new VueSocketIO({
   debug: true,
@@ -18,6 +19,7 @@ Vue.use(new VueSocketIO({
 Vue.use(Contextmenu)
 Vue.use(Viewer)
 Vue.use(VueAxios, axios)
+Vue.use(Toast)
 Vue.prototype._ = _
 
 Vue.config.productionTip = false

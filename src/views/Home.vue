@@ -28,6 +28,11 @@ export default {
   },
   computed: {
     ...mapState(['nowChatId'])
+  },
+  sockets: {
+    getMsg (data) {
+      console.log(data)
+    }
   }
 }
 </script>

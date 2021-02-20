@@ -4,6 +4,7 @@ import home from '@/views/home.vue'
 import login from '@/views/login.vue'
 import picViewer from '@/views/picViewer.vue'
 import video from '@/views/video.vue'
+import search from '@/views/search.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/video',
     name: 'video',
     component: video
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: search
   }
 ]
 

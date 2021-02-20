@@ -1,6 +1,9 @@
 <template>
   <div class="contact-search">
-    <input v-model="input" @focus="open" @blur="close" placeholder="搜索……" type="text">
+    <div class="search-input">
+      <input v-model="input" @focus="open" @blur="close" placeholder="搜索……" type="text">
+      <a @click="showSearch" class="add"><i class="iconfont icon-add"></i></a>
+    </div>
     <div :class="[show ? 'show' : '', 'content']">
       <div v-if="input" class="search">
         <div class="search-box">
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+// import { ipcRenderer } from 'electron'
 export default {
   data () {
     return {
@@ -52,6 +56,17 @@ export default {
     },
     close () {
       this.show = 0
+    },
+    showSearch () {
+      // TODO 考虑通过搜索添加好友
+      // ipcRenderer.send('showSearch')
+      this.axios.post('/api/users/add', {
+        mail: this.input
+      }).then(res => {
+        this.$toast.showToast(`已向${this.input}发送好友请求！`)
+      }).catch(err => {
+        this.$toast.showToast(err.response.data.message)
+      })
     }
   }
 }
@@ -63,6 +78,10 @@ export default {
   width: 100%
   padding: 1em
   padding-bottom: 0
+.search-input
+  display: flex
+  align-items: center
+  z-index: 2
 input
   outline: none
   padding: 0.5em
@@ -73,9 +92,18 @@ input
   background: var(--bg)
   transition: border 0.3s
   -webkit-app-region: no-drag
-  z-index: 2
   &:hover, &:focus
     border: 1px solid var(--dark)
+.add
+  position: absolute
+  right: 0.5em
+  opacity: 0.5
+  cursor: pointer
+  transform: opacity .3s
+  &:hover
+    opacity: 0.8
+    input
+      border: 1px solid var(--dark)
 .content
   position: absolute
   top: 0

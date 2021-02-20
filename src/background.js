@@ -66,7 +66,6 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  showPic()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -99,34 +98,30 @@ ipcMain.on('maximize', e => {
 })
 // 关闭
 ipcMain.on('close', () => {
+  BrowserWindow.getFocusedWindow().hide()
   BrowserWindow.getFocusedWindow().close()
 })
 // 展示图片
-let picWin
 ipcMain.on('showPic', e => {
-  // picWin.center()
-  // picWin.show()
-  showPic()
-  picWin.show()
-})
-function showPic () {
-  picWin = new BrowserWindow({
+  let win = new BrowserWindow({
     width: 750,
     height: 500,
     frame: false,
-    show: false,
+    // show: false,
     webPreferences: {
       nodeIntegration: true
     }
   })
-  picWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/picviewer')
-  picWin.on('closed', () => {
-    picWin = null
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/picviewer')
+  win.on('closed', () => {
+    win = null
   })
-}
-//视频
+  // win.center()
+  // win.show()
+})
+// 视频
 ipcMain.on('showVideo', e => {
-  let videoWin = new BrowserWindow({
+  let win = new BrowserWindow({
     width: 800,
     height: 600,
     frame: false,
@@ -135,8 +130,24 @@ ipcMain.on('showVideo', e => {
       nodeIntegration: true
     }
   })
-  videoWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/video')
-  videoWin.on('closed', () => {
-    videoWin = null
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/video')
+  win.on('closed', () => {
+    win = null
+  })
+})
+// 搜索
+ipcMain.on('showSearch', e => {
+  let win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    frame: false,
+    // show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/search')
+  win.on('closed', () => {
+    win = null
   })
 })

@@ -16,11 +16,6 @@ export default {
     titleBar,
     sidebar
   },
-  sockets: {
-    res (data) {
-      console.log(data)
-    }
-  },
   mounted () {
     document.body.classList.add('light-theme')
     // fetch('http://localhost:8888/echo/test')
@@ -35,7 +30,7 @@ export default {
 </script>
 
 <style lang="sass">
-  @import url('//at.alicdn.com/t/font_2176265_06c3l2zj9xt6.css')
+  @import url('//at.alicdn.com/t/font_2176265_nwy447xtkqc.css')
   *, *:after, *:before
     position: relative
     box-sizing: border-box

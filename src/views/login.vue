@@ -9,10 +9,10 @@
         <p>使用您的账号登录派瑞精灵。</p>
       </div>
       <div class="input">
-        <p>邮箱</p>
-        <input type="text">
-        <p>密码</p>
-        <input type="password">
+        <p :class="[loginForm.mail.error ? 'error' : '']">邮箱{{loginForm.mail.error}}</p>
+        <input :class="[loginForm.mail.error ? 'error-input' : '']" v-model="loginForm.mail.content" type="text">
+        <p :class="[loginForm.password.error ? 'error' : '']">密码{{loginForm.password.error}}</p>
+        <input :class="[loginForm.password.error ? 'error-input' : '']" v-model="loginForm.password.content" type="password">
       </div>
       <div @click="login" class="btn">
         <p>登录</p>
@@ -82,7 +82,7 @@ export default {
   },
   data () {
     return {
-      type: 'complete',
+      type: 'login',
       registerForm: {
         mail: {
           content: '',
@@ -98,13 +98,46 @@ export default {
         },
         avatar: '',
         nick: ''
+      },
+      loginForm: {
+        mail: {
+          content: '123123@123123.com',
+          error: ''
+        },
+        password: {
+          content: '123123123',
+          error: ''
+        }
       }
     }
   },
   methods: {
     ...mapMutations(['setId']),
     login () {
-      this.$router.push('/home')
+      let verify = 1
+      this.loginForm.mail.error = ''
+      this.loginForm.password.error = ''
+      if (this.loginForm.mail.content === '') {
+        this.loginForm.mail.error = ' - 这是必填项'
+        verify = 0
+      }
+      if (this.loginForm.password.content === '') {
+        this.loginForm.password.error = ' - 这是必填项'
+        verify = 0
+      }
+      if (verify) {
+        this.axios.post('/api/login', {
+          mail: this.loginForm.mail.content,
+          password: this.loginForm.password.content
+        }).then(res => {
+          this.$router.push('/home')
+          this.$socket.emit('setId')
+          this.setId(res.data.id)
+        }).catch(() => {
+          this.loginForm.mail.error = ' - 请检查您的邮箱地址是否正确'
+          this.loginForm.password.error = ' - 请检查您的密码是否正确'
+        })
+      }
     },
     register () {
       let verify = 1
