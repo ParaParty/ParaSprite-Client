@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="sass">
-  @import url('//at.alicdn.com/t/font_2176265_nwy447xtkqc.css')
+  @import url('https://at.alicdn.com/t/font_2176265_nwy447xtkqc.css')
   *, *:after, *:before
     position: relative
     box-sizing: border-box

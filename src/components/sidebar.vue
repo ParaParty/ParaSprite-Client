@@ -7,7 +7,7 @@
       <li>
         <i class="iconfont icon-xingqiu"></i>
       </li>
-      <li class="setting">
+      <li @click="test" class="setting">
         <i class="iconfont icon-shezhi"></i>
       </li>
     </ul>
@@ -16,7 +16,12 @@
 
 <script>
 export default {
-
+  methods: {
+    test () {
+      this.$router.push('/')
+      this.$socket.disconnect()
+    }
+  }
 }
 </script>
 

@@ -11,10 +11,11 @@ import VueAxios from 'vue-axios'
 import VueSocketIO from 'vue-socket.io'
 import SocketIO from 'socket.io-client'
 import Toast from '@/components/toast'
-axios.defaults.baseURL = 'http://localhost:7001'
+axios.defaults.baseURL = 'http://192.168.26.96:7001'
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO('localhost:7001')
+  connection: SocketIO('http://192.168.26.96:7001'),
+  options: { autoConnect: false }
 }))
 Vue.use(Contextmenu)
 Vue.use(Viewer)

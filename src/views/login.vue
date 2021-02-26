@@ -101,11 +101,11 @@ export default {
       },
       loginForm: {
         mail: {
-          content: '123123@123123.com',
+          content: '306924625@qq.com',
           error: ''
         },
         password: {
-          content: '123123123',
+          content: 'll306924625',
           error: ''
         }
       }
@@ -131,7 +131,8 @@ export default {
           password: this.loginForm.password.content
         }).then(res => {
           this.$router.push('/home')
-          this.$socket.emit('setId')
+          this.$socket.connect()
+          // this.$socket.emit('setId')
           this.setId(res.data.id)
         }).catch(() => {
           this.loginForm.mail.error = ' - 请检查您的邮箱地址是否正确'
@@ -197,6 +198,8 @@ export default {
         nick: this.registerForm.nick
       }).then(res => {
         this.$router.push('/home')
+        this.$socket.emit('setId')
+        this.setId(res.data.id)
       })
     }
   }

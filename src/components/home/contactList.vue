@@ -26,7 +26,7 @@
             ]"
         >
           <div class="avatar">
-            <img src="@/assets/avatar.png" alt="">
+            <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
           <div class="info">
             <p class="nick">{{item.type == 'user' ? include.user[item.id].nick : include.group[item.id].nick}}</p>
@@ -54,7 +54,7 @@
           ]"
         >
           <div class="avatar">
-            <img src="@/assets/avatar.png" alt="">
+            <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
           <div class="info">
             <p class="nick">{{include.user[item.id].nick}}</p>
@@ -71,7 +71,7 @@
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
         <li @click="choose(2, n, m, item.id, 'group')" v-for="(item, m) in lists.list" :key="m" :class="['item', nowChoose[0] == 2 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '']">
           <div class="avatar">
-            <img src="@/assets/avatar.png" alt="">
+            <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
           <div class="info">
             <p class="nick">{{include.group[item.id].nick}}</p>
@@ -96,20 +96,7 @@ export default {
       // 当前选中的联系人（菜单/列表/项）
       nowChoose: [-1, 0, 0],
       // 消息列表
-      messageList: [
-        {
-          id: 0,
-          name: '置顶',
-          show: 1,
-          list: []
-        },
-        {
-          id: 1,
-          name: '消息',
-          show: 1,
-          list: []
-        }
-      ],
+      messageList: [],
       // 联系人列表
       contactList: {},
       // 群聊列表
@@ -119,10 +106,14 @@ export default {
   computed: {
     ...mapState(['relationship', 'include'])
   },
+  watch: {
+    relationship () {
+      this.getData()
+    }
+  },
   methods: {
     ...mapMutations(['showChat']),
     show (n) {
-      console.log(n)
       if (this.nowShow === 0) {
         this.messageList[n].show = !this.messageList[n].show
       } else if (this.nowShow === 1) {
@@ -154,63 +145,76 @@ export default {
         customClass: 'contextmenu',
         event
       })
-    }
-  },
-  mounted () {
-    // 初始化关系表
-    const contactList = {}
-    const groupList = {}
-    this.relationship.forEach(item => {
-      // 初始化消息列表
-      if (item.inchat) {
-        if (item.top) {
-          this.messageList[0].list.push({
-            id: item.id,
-            type: item.type,
-            lastMsg: item.lastMsg,
-            lastMsgNum: item.lastMsgNum
+    },
+    getData () {
+      // 初始化关系表
+      const contactList = {}
+      const groupList = {}
+      const messageList = [
+        {
+          id: 0,
+          name: '置顶',
+          show: 1,
+          list: []
+        },
+        {
+          id: 1,
+          name: '消息',
+          show: 1,
+          list: []
+        }
+      ]
+      this.relationship.forEach(item => {
+        // 初始化消息列表
+        if (item.inchat) {
+          if (item.top) {
+            messageList[0].list.push({
+              id: item.id,
+              type: item.type,
+              lastMsg: item.lastMsg,
+              lastMsgNum: item.lastMsgNum
+            })
+          } else {
+            messageList[1].list.push({
+              id: item.id,
+              type: item.type,
+              lastMsg: item.lastMsg,
+              lastMsgNum: item.lastMsgNum
+            })
+          }
+        }
+        // 初始化联系人
+        if (item.type === 'user') {
+          if (!contactList[item.groupId]) {
+            contactList[item.groupId] = {
+              name: item.group,
+              show: 1,
+              list: []
+            }
+          }
+          contactList[item.groupId].list.push({
+            id: item.id
           })
         } else {
-          this.messageList[1].list.push({
+          // 初始化群组列表
+          if (!groupList[item.groupId]) {
+            groupList[item.groupId] = {
+              name: item.group,
+              show: 1,
+              list: []
+            }
+          }
+          groupList[item.groupId].list.push({
             id: item.id,
-            type: item.type,
             lastMsg: item.lastMsg,
             lastMsgNum: item.lastMsgNum
           })
         }
-      }
-      // 初始化联系人
-      if (item.type === 'user') {
-        if (!contactList[item.groupId]) {
-          contactList[item.groupId] = {
-            name: item.group,
-            show: 1,
-            list: []
-          }
-        }
-        contactList[item.groupId].list.push({
-          id: item.id
-        })
-      } else {
-        // 初始化群组列表
-        if (!groupList[item.groupId]) {
-          groupList[item.groupId] = {
-            name: item.group,
-            show: 1,
-            list: []
-          }
-        }
-        groupList[item.groupId].list.push({
-          id: item.id,
-          lastMsg: item.lastMsg,
-          lastMsgNum: item.lastMsgNum
-        })
-      }
-    })
-    console.log(contactList)
-    console.log(groupList)
-    this.contactList = contactList
-    this.groupList = groupList
+      })
+      this.messageList = messageList
+      this.contactList = contactList
+      this.groupList = groupList
+    }
   }
 }
 </script>

@@ -91,7 +91,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import { EmojiIndex } from 'emoji-mart-vue-fast'
 export default {
@@ -103,7 +103,18 @@ export default {
   computed: {
     ...mapState(['id', 'nowChatId', 'nowChatType', 'chatDB', 'include'])
   },
+  watch: {
+    nowChatId () {
+      if (!this.chatDB[this.nowChatType][this.nowChatId]) {
+        this.setChatDB({
+          type: this.nowChatType,
+          id: this.nowChatId
+        })
+      }
+    }
+  },
   methods: {
+    ...mapMutations(['setChatDB']),
     showPic () {
       ipcRenderer.send('showPic')
     },
@@ -116,6 +127,14 @@ export default {
         type.push('right')
       }
       return type
+    }
+  },
+  mounted () {
+    if (!this.chatDB[this.nowChatType][this.nowChatId]) {
+      this.setChatDB({
+        type: this.nowChatType,
+        id: this.nowChatId
+      })
     }
   }
 }

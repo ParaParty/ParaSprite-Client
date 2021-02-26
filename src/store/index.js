@@ -61,48 +61,47 @@ export default new Vuex.Store({
     },
     // 存储id关联信息
     include: {
-      user: {
-        0: {
-          nick: '陆陆侠',
-          avatar: 'avatar2.png',
-          online: 0,
-          emoji: '📢',
-          sign: 'SB————'
-        },
-        1: {
-          nick: '槕纸喵',
-          avatar: 'avatar.png',
-          online: 0,
-          emoji: '🐟',
-          sign: '摸鱼中'
-        },
-        2: {
-          nick: '李亮亮',
-          avatar: 'avatar2.png',
-          online: 1,
-          emoji: '',
-          sign: ''
-        },
-        3: {
-          nick: '剑羽',
-          avatar: 'avatar2.png',
-          online: 1,
-          emoji: '',
-          sign: '该健身了！'
-        }
-      },
-      group: {
-        1: {
-          nick: '我的世界',
-          avatar: 'avatar.png'
-        }
-      }
+      // user: {
+      //   0: {
+      //     nick: '陆陆侠',
+      //     avatar: 'avatar2.png',
+      //     online: 0,
+      //     emoji: '📢',
+      //     sign: 'SB————'
+      //   },
+      //   1: {
+      //     nick: '槕纸喵',
+      //     avatar: 'avatar.png',
+      //     online: 0,
+      //     emoji: '🐟',
+      //     sign: '摸鱼中'
+      //   },
+      //   2: {
+      //     nick: '李亮亮',
+      //     avatar: 'avatar2.png',
+      //     online: 1,
+      //     emoji: '',
+      //     sign: ''
+      //   },
+      //   3: {
+      //     nick: '剑羽',
+      //     avatar: 'avatar2.png',
+      //     online: 1,
+      //     emoji: '',
+      //     sign: '该健身了！'
+      //   }
+      // },
+      // group: {
+      //   1: {
+      //     nick: '我的世界',
+      //     avatar: 'avatar.png'
+      //   }
+      // }
     },
     // 存储关系
     relationship: [
       /*
         用户ID或群ID
-        状态
         类型 | user/group
         备注
         分组名
@@ -112,54 +111,50 @@ export default new Vuex.Store({
         最后一条消息
         未读消息数
       */
-      {
-        id: 1,
-        status: 1,
-        type: 'user',
-        remark: '',
-        group: '特别关注',
-        groupId: 0,
-        top: 0,
-        inchat: 1,
-        lastMsg: '你好，在吗？',
-        lastMsgNum: 5
-      },
-      {
-        id: 2,
-        status: 1,
-        type: 'user',
-        remark: '',
-        group: '我的好友',
-        groupId: 1,
-        top: 1,
-        inchat: 1,
-        lastMsg: '你好，在吗？',
-        lastMsgNum: 5
-      },
-      {
-        id: 3,
-        status: 1,
-        type: 'user',
-        remark: '',
-        group: '我的好友',
-        groupId: 1,
-        top: 1,
-        inchat: 1,
-        lastMsg: '你好，在吗？',
-        lastMsgNum: 5
-      },
-      {
-        id: 1,
-        status: 1,
-        type: 'group',
-        remark: '',
-        group: '我的群聊',
-        groupId: 0,
-        top: 0,
-        inchat: 1,
-        lastMsg: '你好，在吗？',
-        lastMsgNum: 5
-      }
+      // {
+      //   id: 1,
+      //   type: 'user',
+      //   remark: '',
+      //   group: '特别关注',
+      //   groupId: 0,
+      //   top: 0,
+      //   inchat: 1,
+      //   lastMsg: '你好，在吗？',
+      //   lastMsgNum: 5
+      // },
+      // {
+      //   id: 2,
+      //   type: 'user',
+      //   remark: '',
+      //   group: '我的好友',
+      //   groupId: 1,
+      //   top: 1,
+      //   inchat: 1,
+      //   lastMsg: '你好，在吗？',
+      //   lastMsgNum: 5
+      // },
+      // {
+      //   id: 3,
+      //   type: 'user',
+      //   remark: '',
+      //   group: '我的好友',
+      //   groupId: 1,
+      //   top: 1,
+      //   inchat: 1,
+      //   lastMsg: '你好，在吗？',
+      //   lastMsgNum: 5
+      // },
+      // {
+      //   id: 1,
+      //   type: 'group',
+      //   remark: '',
+      //   group: '我的群聊',
+      //   groupId: 0,
+      //   top: 0,
+      //   inchat: 1,
+      //   lastMsg: '你好，在吗？',
+      //   lastMsgNum: 5
+      // }
     ]
   },
   mutations: {
@@ -169,7 +164,7 @@ export default new Vuex.Store({
     },
     sendMsg (state, payload) {
       const chat = state.chatDB[state.nowChatType][state.nowChatId]
-      if (chat.slice(-1)[0].from === state.id) {
+      if (chat.slice(-1)[0] && chat.slice(-1)[0].from === state.id) {
         chat[chat.length - 1].content.push({ type: 'text', content: payload })
       } else {
         state.chatDB[state.nowChatType][state.nowChatId].push({
@@ -181,8 +176,31 @@ export default new Vuex.Store({
         })
       }
     },
+    getMsg (state, payload) {
+      const chat = state.chatDB[state.nowChatType][state.nowChatId]
+      if (chat.slice(-1)[0] && chat.slice(-1)[0].from === payload.id) {
+        chat[chat.length - 1].content.push({ type: 'text', content: payload.content })
+      } else {
+        state.chatDB[state.nowChatType][state.nowChatId].push({
+          type: 'message',
+          from: payload.id,
+          content: [
+            { type: 'text', content: payload.content }
+          ]
+        })
+      }
+    },
     setId (state, payload) {
       state.id = payload
+    },
+    setRelation (state, payload) {
+      state.relationship = payload
+    },
+    setInclude (state, payload) {
+      state.include = payload
+    },
+    setChatDB (state, payload) {
+      Vue.set(state.chatDB[payload.type], payload.id, [])
     }
   },
   actions: {

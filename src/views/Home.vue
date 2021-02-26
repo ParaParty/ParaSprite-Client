@@ -16,7 +16,7 @@ import contact from '@/components/home/contact.vue'
 import chat from '@/components/home/chat.vue'
 import intro from '@/components/home/intro.vue'
 import chatInfo from '@/components/home/chatInfo.vue'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
@@ -31,8 +31,47 @@ export default {
   },
   sockets: {
     getMsg (data) {
-      console.log(data)
+      this.getMsg({
+        id: data.userId,
+        content: data.msg
+      })
     }
+  },
+  methods: {
+    ...mapMutations(['setRelation', 'setInclude', 'getMsg'])
+  },
+  mounted () {
+    // 初始化联系人列表
+    const relationship = []
+    const include = { user: {}, group: {} }
+    this.axios.get('/api/get').then(res => {
+      res.data.forEach(item => {
+        const relation = {
+          id: item.relationId,
+          type: item.type,
+          remark: item.remark,
+          group: item.group,
+          groupId: item.groupId,
+          top: item.top,
+          inChat: item.inChat,
+          lastMsg: item.lastMsg,
+          lastMsgNum: item.lastMsgNum
+        }
+        relationship.push(relation)
+        if (item.type === 'user') {
+          const user = {
+            nick: item.include[0].nick,
+            avatar: item.include[0].avatar,
+            online: item.include[0].online,
+            emoji: item.include[0].emoji,
+            sign: item.include[0].sign
+          }
+          include.user[item.include[0]._id] = user
+        }
+      })
+      this.setInclude(include)
+      this.setRelation(relationship)
+    })
   }
 }
 </script>
