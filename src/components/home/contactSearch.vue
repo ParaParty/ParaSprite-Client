@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 // import { ipcRenderer } from 'electron'
 export default {
   data () {
@@ -51,6 +52,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['getCardMsg']),
     open () {
       this.show = 1
     },
@@ -64,6 +66,12 @@ export default {
         mail: this.input
       }).then(res => {
         this.$toast.showToast(`已向${this.input}发送好友请求！`)
+        this.getCardMsg({
+          id: res.data.userId,
+          time: res.data.time,
+          content: res.data.content,
+          include: res.data.include
+        })
       }).catch(err => {
         this.$toast.showToast(err.response.data.message)
       })

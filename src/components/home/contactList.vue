@@ -147,6 +147,7 @@ export default {
       })
     },
     getData () {
+      console.log('update')
       // 初始化关系表
       const contactList = {}
       const groupList = {}
@@ -162,13 +163,27 @@ export default {
           name: '消息',
           show: 1,
           list: []
+        },
+        {
+          id: 2,
+          name: '服务',
+          show: 1,
+          list: []
         }
       ]
       this.relationship.forEach(item => {
         // 初始化消息列表
-        if (item.inchat) {
+        console.log('聊天中' + item.inChat)
+        if (item.inChat) {
           if (item.top) {
             messageList[0].list.push({
+              id: item.id,
+              type: item.type,
+              lastMsg: item.lastMsg,
+              lastMsgNum: item.lastMsgNum
+            })
+          } else if (item.group === '我的服务') {
+            messageList[2].list.push({
               id: item.id,
               type: item.type,
               lastMsg: item.lastMsg,
@@ -315,6 +330,7 @@ export default {
       border-radius: 2em
   .info
     margin-left: 0.5em
+    width: calc(100% - 3em)
   .nick
     color: var(--text)
     margin-bottom: 0.1em
@@ -322,6 +338,9 @@ export default {
     font-size: 0.8em
     opacity: 0.6
     color: var(--text)
+    white-space: nowrap
+    text-overflow: ellipsis
+    overflow: hidden
   .num
     position: absolute
     right: 0.5em

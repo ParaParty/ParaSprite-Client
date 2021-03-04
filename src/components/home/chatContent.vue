@@ -2,10 +2,6 @@
   <ul class="chat-content">
     <li>{{nowChatType + ' ' + nowChatId}}</li>
     <li v-for="(msg, index) in chatDB[nowChatType][nowChatId]" :key="index" :class="getClass(msg)">
-      <!-- 提示信息 -->
-      <p v-if="msg.type != 'message'">
-        {{msg.content}}
-      </p>
       <!-- 头像 -->
       <div v-if="msg.type == 'message'" class="avatar">
         <img src="@/assets/avatar.png" alt="">
@@ -26,9 +22,38 @@
           </li>
         </ul>
       </div>
+      <!-- 卡片信息 -->
+      <div v-else-if="msg.type == 'card'" class="card-box">
+        <p class="title">好友验证</p>
+        <div class="card-content">
+          <p v-if="msg.content.type == 'friendRes'">用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>申请添加您为好友。</p>
+          <p v-if="msg.content.type == 'friendReq'">已向用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>发送好友申请。</p>
+        </div>
+        <div v-if="!msg.status" class="btns">
+          <a @click="friendRes(msg.time, 1)" class="btn-confirm">确认</a>
+          <a @click="friendRes(msg.time, 0)">拒绝</a>
+        </div>
+        <div v-else class="status">
+          <p>{{msg.status}}</p>
+        </div>
+      </div>
+      <!-- 提示信息 -->
+      <div v-else>
+        {{msg.content}}
+      </div>
     </li>
-    <li class="notice">
-      <p>静态测试</p>
+    <!-- <li class="notice">
+      <p>静态测试区域</p>
+    </li>
+    <li class="card">
+      <p class="title">好友验证</p>
+      <div class="card-content">
+        <p>用户<span class="card-mark">@某人</span>申请添加您为好友。</p>
+      </div>
+      <div class="btns">
+        <a class="btn-confirm" href="">确认</a>
+        <a href="">拒绝</a>
+      </div>
     </li>
     <li class="notice">
       <p>2020年11月22日</p>
@@ -37,10 +62,10 @@
       <p>2020年11月23日</p>
     </li>
     <li class="notice">
-      <p>🎉 李亮亮 加入了群聊！</p>
+      <p>🎉 某人 加入了群聊！</p>
     </li>
     <li class="notice">
-      <p>😥 李亮亮 退出了群聊！</p>
+      <p>😥 某人 退出了群聊！</p>
     </li>
     <li>
       <div class="avatar">
@@ -85,7 +110,7 @@
           </li>
         </ul>
       </div>
-    </li>
+    </li> -->
   </ul>
 </template>
 
@@ -123,10 +148,28 @@ export default {
       if (['notice', 'time'].includes(msg.type)) {
         type.push('notice')
       }
+      if (msg.type === 'card') {
+        type.push('card')
+      }
       if (msg.from === this.id) {
         type.push('right')
       }
       return type
+    },
+    friendRes (time, type) {
+      const target = this._.find(this.chatDB[this.nowChatType][this.nowChatId], {
+        time: time
+      })
+      if (type) {
+        target.status = '已确认'
+      } else {
+        target.status = '已拒绝'
+      }
+      this.axios.post('/api/users/add/return', {
+        id: target.content.id,
+        time: time,
+        accept: type
+      })
     }
   },
   mounted () {
@@ -199,6 +242,7 @@ export default {
     margin-top: 0.2em
     border-radius: 0.2em
     color: var(--text)
+    max-width: 25em
     li
       padding: 0.25em
       ::v-deep .emoji
@@ -248,4 +292,40 @@ export default {
   .emoji-mart-emoji
     vertical-align: sub
     padding: 0
+  // 卡片信息
+  .card
+    background: var(--block-bg)
+    margin: 0.5em 3.5em
+    padding: 1em !important
+    .card-box
+      display: flex
+      width: 100%
+    .title
+      font-weight: bold
+      letter-spacing: 0.1em
+      color: var(--dark)
+      margin-right: 1em
+    .card-content
+      color: var(--text)
+    .card-mark
+      padding: 0.2em
+      margin: 0.2em
+      border-radius: 0.2em
+      color: var(--main)
+    .btns
+      position: absolute
+      right: -0.5em
+      a
+        color: var(--dark)
+        margin-right: 0.5em
+        padding: 0.2em
+        border-radius: 0.2em
+        &:hover
+          background: var(--hover-bg)
+      .btn-confirm
+        color: var(--main)
+    .status
+      position: absolute
+      right: 0
+      color: var(--dark)
 </style>

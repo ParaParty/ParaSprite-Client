@@ -31,47 +31,69 @@ export default {
   },
   sockets: {
     getMsg (data) {
-      this.getMsg({
-        id: data.userId,
-        content: data.msg
-      })
+      this.getMsg(data)
+      if (this.nowChatId === data.id) {
+        const chatContent = document.querySelector('.chat-content')
+        if (Math.ceil(chatContent.scrollTop) - (chatContent.scrollHeight - chatContent.clientHeight) < 5) {
+          this.$nextTick(() => {
+            chatContent.scrollTop = chatContent.scrollHeight
+          })
+        }
+      } else {
+        this.$socket.emit('addLastMsgNum', { id: data.id })
+      }
+    },
+    getCardMsg (data) {
+      this.getCardMsg(data)
+      if (this.nowChatId !== data.id) {
+        this.$socket.emit('addLastMsgNum', { id: data.id })
+      }
+    },
+    updateCardMsg (data) {
+      this.updateCardMsg(data)
+    },
+    updateRelation () {
+      this.updateRelation()
     }
   },
   methods: {
-    ...mapMutations(['setRelation', 'setInclude', 'getMsg'])
+    ...mapMutations(['setRelation', 'setInclude', 'getMsg', 'getCardMsg', 'updateCardMsg']),
+    updateRelation () {
+      // 初始化联系人列表
+      const relationship = []
+      const include = { user: {}, group: {} }
+      this.axios.get('/api/get').then(res => {
+        res.data.forEach(item => {
+          const relation = {
+            id: item.relationId,
+            type: item.type,
+            remark: item.remark,
+            group: item.group,
+            groupId: item.groupId,
+            top: item.top,
+            inChat: item.inChat,
+            lastMsg: item.lastMsg,
+            lastMsgNum: item.lastMsgNum
+          }
+          relationship.push(relation)
+          if (item.type === 'user') {
+            const user = {
+              nick: item.include[0].nick,
+              avatar: item.include[0].avatar,
+              online: item.include[0].online,
+              emoji: item.include[0].emoji,
+              sign: item.include[0].sign
+            }
+            include.user[item.include[0]._id] = user
+          }
+        })
+        this.setInclude(include)
+        this.setRelation(relationship)
+      })
+    }
   },
   mounted () {
-    // 初始化联系人列表
-    const relationship = []
-    const include = { user: {}, group: {} }
-    this.axios.get('/api/get').then(res => {
-      res.data.forEach(item => {
-        const relation = {
-          id: item.relationId,
-          type: item.type,
-          remark: item.remark,
-          group: item.group,
-          groupId: item.groupId,
-          top: item.top,
-          inChat: item.inChat,
-          lastMsg: item.lastMsg,
-          lastMsgNum: item.lastMsgNum
-        }
-        relationship.push(relation)
-        if (item.type === 'user') {
-          const user = {
-            nick: item.include[0].nick,
-            avatar: item.include[0].avatar,
-            online: item.include[0].online,
-            emoji: item.include[0].emoji,
-            sign: item.include[0].sign
-          }
-          include.user[item.include[0]._id] = user
-        }
-      })
-      this.setInclude(include)
-      this.setRelation(relationship)
-    })
+    this.updateRelation()
   }
 }
 </script>

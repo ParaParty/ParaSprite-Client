@@ -101,11 +101,11 @@ export default {
       },
       loginForm: {
         mail: {
-          content: '306924625@qq.com',
+          content: '',
           error: ''
         },
         password: {
-          content: 'll306924625',
+          content: '',
           error: ''
         }
       }
@@ -198,7 +198,7 @@ export default {
         nick: this.registerForm.nick
       }).then(res => {
         this.$router.push('/home')
-        this.$socket.emit('setId')
+        this.$socket.connect()
         this.setId(res.data.id)
       })
     }

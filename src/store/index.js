@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -34,6 +35,13 @@ export default new Vuex.Store({
             content: [
               { type: 'text', content: '不出意外这条信息应该是我发的' }
             ]
+          },
+          {
+            type: 'card',
+            content: {
+              type: 'friendRes',
+              id: '123123123'
+            }
           }
         ],
         2: [
@@ -161,40 +169,108 @@ export default new Vuex.Store({
     showChat (state, payload) {
       state.nowChatId = payload.id
       state.nowChatType = payload.type
+      this.commit('setRelationInfo', {
+        id: payload.id,
+        content: {
+          lastMsgNum: 0
+        }
+      })
     },
     sendMsg (state, payload) {
       const chat = state.chatDB[state.nowChatType][state.nowChatId]
       if (chat.slice(-1)[0] && chat.slice(-1)[0].from === state.id) {
-        chat[chat.length - 1].content.push({ type: 'text', content: payload })
+        chat[chat.length - 1].content.push({ type: 'text', content: payload.content, time: payload.time })
       } else {
-        state.chatDB[state.nowChatType][state.nowChatId].push({
+        chat.push({
           type: 'message',
           from: state.id,
+          time: payload.time,
           content: [
-            { type: 'text', content: payload }
+            { type: 'text', content: payload.content, time: payload.time }
           ]
         })
       }
     },
     getMsg (state, payload) {
-      const chat = state.chatDB[state.nowChatType][state.nowChatId]
+      state.chatDB[payload.type][payload.id] ?? Vue.set(state.chatDB.user, payload.id, [])
+      const chat = state.chatDB[payload.type][payload.id]
       if (chat.slice(-1)[0] && chat.slice(-1)[0].from === payload.id) {
-        chat[chat.length - 1].content.push({ type: 'text', content: payload.content })
+        chat[chat.length - 1].content.push({ type: 'text', content: payload.content, time: payload.time })
       } else {
-        state.chatDB[state.nowChatType][state.nowChatId].push({
+        chat.push({
           type: 'message',
           from: payload.id,
+          time: payload.time,
           content: [
-            { type: 'text', content: payload.content }
+            { type: 'text', content: payload.content, time: payload.time }
           ]
         })
       }
+      // 修改关系
+      const index = _.findIndex(state.relationship, { id: payload.id })
+      const info = { inChat: true, lastMsg: payload.content }
+      if (state.nowChatId !== payload.id) {
+        info.lastMsgNum = state.relationship[index].lastMsgNum + 1
+      }
+      Vue.set(state.relationship, index, {
+        ...state.relationship[index],
+        ...info
+      })
+    },
+    getCardMsg (state, payload) {
+      // payload.id 发送人id
+      state.chatDB.user[payload.id] ?? Vue.set(state.chatDB.user, payload.id, [])
+      // 存入附加联系人信息
+      state.include.user[payload.content.id] = payload.include
+      // 修改联系人列表状态并发送
+      const chat = state.chatDB.user[payload.id]
+      const index = _.findIndex(state.relationship, { id: payload.id })
+      const info = { inChat: true }
+      let status = ''
+      if (payload.content.type === 'friendRes') {
+        info.lastMsg = '收到了新的好友请求'
+      } else if (payload.content.type === 'friendReq') {
+        info.lastMsg = '发送了新的好友请求'
+        status = '等待验证中'
+      }
+      if (state.nowChatId !== payload.id) {
+        info.lastMsgNum = state.relationship[index].lastMsgNum + 1
+      }
+      Vue.set(state.relationship, index, {
+        ...state.relationship[index],
+        ...info
+      })
+      // 推送卡片信息
+      chat.push({
+        type: 'card',
+        time: payload.time,
+        content: payload.content,
+        status: status
+      })
+    },
+    updateCardMsg (state, payload) {
+      const chat = state.chatDB.user[payload.userId]
+      const index = _.findIndex(chat, {
+        time: payload.time
+      })
+      const update = payload.update
+      Vue.set(state.chatDB.user[payload.userId], index, {
+        ...chat[index],
+        ...update
+      })
     },
     setId (state, payload) {
       state.id = payload
     },
     setRelation (state, payload) {
       state.relationship = payload
+    },
+    setRelationInfo (state, payload) {
+      const index = _.findIndex(state.relationship, { id: payload.id })
+      Vue.set(state.relationship, index, {
+        ...state.relationship[index],
+        ...payload.content
+      })
     },
     setInclude (state, payload) {
       state.include = payload

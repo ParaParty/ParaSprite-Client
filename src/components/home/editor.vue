@@ -63,13 +63,28 @@ export default {
     ...mapState(['nowChatId', 'id'])
   },
   methods: {
-    ...mapMutations(['sendMsg']),
+    ...mapMutations(['sendMsg', 'setRelationInfo']),
     send () {
-      const payload = document.querySelector('.input').innerHTML
+      this.setRelationInfo({
+        id: this.nowChatId,
+        content: {
+          inChat: true,
+          lastMsg: document.querySelector('.input').innerHTML
+        }
+      })
+      const time = new Date().getTime()
+      const payload = {
+        time: time,
+        content: document.querySelector('.input').innerHTML
+      }
       this.sendMsg(payload)
-      this.$socket.emit('sendMsg', { msg: payload, userId: this.nowChatId })
+      this.$socket.emit('sendMsg', { msg: payload.content, userId: this.nowChatId, time: time })
       document.querySelector('.input').innerHTML = ''
       this.$forceUpdate()
+      const chatContent = document.querySelector('.chat-content')
+      this.$nextTick(() => {
+        chatContent.scrollTop = chatContent.scrollHeight
+      })
     },
     // 监听按键操作
     inputKeydown (event) {
