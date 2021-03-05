@@ -132,6 +132,7 @@ export default {
         type: type
       })
       this.nowChoose = [list, n, m]
+      this.$socket.emit('clearLastMsgNum', { id: id })
     },
     onUserMenu () {
       this.$contextmenu({
@@ -173,29 +174,20 @@ export default {
       ]
       this.relationship.forEach(item => {
         // 初始化消息列表
-        console.log('聊天中' + item.inChat)
+        const data = {
+          id: item.id,
+          type: item.type,
+          lastMsg: item.lastMsg,
+          lastMsgNum: item.lastMsgNum,
+          lastActiveTime: item.lastActiveTime
+        }
         if (item.inChat) {
           if (item.top) {
-            messageList[0].list.push({
-              id: item.id,
-              type: item.type,
-              lastMsg: item.lastMsg,
-              lastMsgNum: item.lastMsgNum
-            })
+            messageList[0].list.push(data)
           } else if (item.group === '我的服务') {
-            messageList[2].list.push({
-              id: item.id,
-              type: item.type,
-              lastMsg: item.lastMsg,
-              lastMsgNum: item.lastMsgNum
-            })
+            messageList[2].list.push(data)
           } else {
-            messageList[1].list.push({
-              id: item.id,
-              type: item.type,
-              lastMsg: item.lastMsg,
-              lastMsgNum: item.lastMsgNum
-            })
+            messageList[1].list.push(data)
           }
         }
         // 初始化联系人
@@ -229,6 +221,12 @@ export default {
       this.messageList = messageList
       this.contactList = contactList
       this.groupList = groupList
+      this.sortMessageList()
+    },
+    sortMessageList () {
+      this.messageList[0].list = this._.orderBy(this.messageList[0].list, 'lastActiveTime', 'desc')
+      this.messageList[1].list = this._.orderBy(this.messageList[1].list, 'lastActiveTime', 'desc')
+      this.messageList[2].list = this._.orderBy(this.messageList[2].list, 'lastActiveTime', 'desc')
     }
   }
 }

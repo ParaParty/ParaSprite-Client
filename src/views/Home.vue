@@ -73,7 +73,8 @@ export default {
             top: item.top,
             inChat: item.inChat,
             lastMsg: item.lastMsg,
-            lastMsgNum: item.lastMsgNum
+            lastMsgNum: item.lastMsgNum,
+            lastActiveTime: item.lastActiveTime
           }
           relationship.push(relation)
           if (item.type === 'user') {

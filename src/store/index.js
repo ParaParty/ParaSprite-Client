@@ -208,7 +208,7 @@ export default new Vuex.Store({
       }
       // 修改关系
       const index = _.findIndex(state.relationship, { id: payload.id })
-      const info = { inChat: true, lastMsg: payload.content }
+      const info = { inChat: true, lastMsg: payload.content, lastActiveTime: payload.time }
       if (state.nowChatId !== payload.id) {
         info.lastMsgNum = state.relationship[index].lastMsgNum + 1
       }
@@ -225,7 +225,7 @@ export default new Vuex.Store({
       // 修改联系人列表状态并发送
       const chat = state.chatDB.user[payload.id]
       const index = _.findIndex(state.relationship, { id: payload.id })
-      const info = { inChat: true }
+      const info = { inChat: true, lastActiveTime: payload.time }
       let status = ''
       if (payload.content.type === 'friendRes') {
         info.lastMsg = '收到了新的好友请求'
@@ -249,12 +249,12 @@ export default new Vuex.Store({
       })
     },
     updateCardMsg (state, payload) {
-      const chat = state.chatDB.user[payload.userId]
+      const chat = state.chatDB.user[payload.id]
       const index = _.findIndex(chat, {
         time: payload.time
       })
       const update = payload.update
-      Vue.set(state.chatDB.user[payload.userId], index, {
+      Vue.set(state.chatDB.user[payload.id], index, {
         ...chat[index],
         ...update
       })
