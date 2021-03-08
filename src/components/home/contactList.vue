@@ -13,14 +13,12 @@
           {{lists.name}}
         </li>
         <li @contextmenu.prevent='onUserMenu'
-            @click="choose(0, n, m, item.id, item.type)"
-            v-for="(item, m) in lists.list"
+            @click="choose(item.id, item.type)"
+            v-for="item in lists.list"
             :key="item.type + item.id"
             :class="[
               'item',
-              nowChoose[0] == 0 &&
-              nowChoose[1] == n &&
-              nowChoose[2] == m ? 'active-item' : '',
+              nowChatId == item.id ? 'active-item' : '',
               item.lastMsgNum ? 'status-new': '',
               item.type == 'user' && !include.user[item.id].online ? 'status-offline' : ''
             ]"
@@ -42,14 +40,12 @@
     <div :style="{transform: 'translate(' + (0.5 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 1 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in contactList" :key="lists.id" :class="['list', lists.show ? '' : 'list-hide']">
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @click="choose(1, n, m, item.id, 'user')"
-          v-for="(item, m) in lists.list"
+        <li @click="choose(item.id, 'user')"
+          v-for="item in lists.list"
           :key="item.id"
           :class="[
             'item',
-            nowChoose[0] == 1 &&
-            nowChoose[1] == n &&
-            nowChoose[2] == m ? 'active-item' : '',
+            nowChatId == item.id ? 'active-item' : '',
             include.user[item.id].online ? '' : 'status-offline'
           ]"
         >
@@ -69,7 +65,13 @@
     <div :style="{transform: 'translate(' + (1 - 0.5 * nowShow) + 'em, 0)'}" :class="[nowShow == 2 ? '' : 'type-hide', 'item-list']">
       <ul v-for="(lists, n) in groupList" :key="n" :class="['list', lists.show ? '' : 'list-hide']">
         <li @click="show(n)" class="title"><i class="iconfont icon-zhankai"></i>{{lists.name}}</li>
-        <li @click="choose(2, n, m, item.id, 'group')" v-for="(item, m) in lists.list" :key="m" :class="['item', nowChoose[0] == 2 && nowChoose[1] == n && nowChoose[2] == m ? 'active-item' : '']">
+        <li @click="choose(item.id, 'group')"
+          v-for="(item, m) in lists.list" :key="m"
+          :class="[
+            'item',
+            nowChatId == item.id ? 'active-item' : '',
+          ]"
+        >
           <div class="avatar">
             <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
@@ -93,8 +95,6 @@ export default {
     return {
       // 当前展示的类别
       nowShow: 0,
-      // 当前选中的联系人（菜单/列表/项）
-      nowChoose: [-1, 0, 0],
       // 消息列表
       messageList: [],
       // 联系人列表
@@ -104,7 +104,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['relationship', 'include'])
+    ...mapState(['relationship', 'include', 'nowChatId'])
   },
   watch: {
     relationship () {
@@ -125,13 +125,12 @@ export default {
     showType (n) {
       this.nowShow = n
     },
-    choose (list, n, m, id, type) {
+    choose (id, type) {
       console.log(id)
       this.showChat({
         id: id,
         type: type
       })
-      this.nowChoose = [list, n, m]
       this.$socket.emit('clearLastMsgNum', { id: id })
     },
     onUserMenu () {

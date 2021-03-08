@@ -65,14 +65,15 @@ export default {
   methods: {
     ...mapMutations(['sendMsg', 'setRelationInfo']),
     send () {
+      const time = new Date().getTime()
       this.setRelationInfo({
         id: this.nowChatId,
         content: {
           inChat: true,
-          lastMsg: document.querySelector('.input').innerHTML
+          lastMsg: document.querySelector('.input').innerHTML,
+          lastActiveTime: time
         }
       })
-      const time = new Date().getTime()
       const payload = {
         time: time,
         content: document.querySelector('.input').innerHTML
