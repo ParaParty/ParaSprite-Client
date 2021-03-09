@@ -284,8 +284,8 @@ export default new Vuex.Store({
     setChatDB (state, payload) {
       Vue.set(state.chatDB[payload.type], payload.id, [])
     },
-    addPic (state, payload) {
-      state.showPicList.push(payload)
+    setPicList (state, payload) {
+      state.showPicList = payload
     },
     clear (state) {
       state.id = ''
@@ -331,8 +331,8 @@ export default new Vuex.Store({
     setChatDB (store, payload) {
       store.commit('setChatDB', payload)
     },
-    addPic (store, payload) {
-      store.commit('addPic', payload)
+    setPicList (store, payload) {
+      store.commit('setPicList', payload)
     },
     clear (store) {
       store.commit('clear')
@@ -342,7 +342,7 @@ export default new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      whitelist: ['clear']
+      whitelist: ['setPicList']
     }),
     createSharedMutations()
   ]

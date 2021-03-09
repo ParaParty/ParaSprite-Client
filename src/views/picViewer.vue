@@ -1,5 +1,5 @@
 <template>
-  <div class="viewer" v-viewer="options">
+  <div class="viewer" v-viewer.rebuild="options">
     <img v-for="(src, index) in showPicList" :key="index" :src="src" alt="">
   </div>
 </template>
@@ -12,6 +12,7 @@ export default {
       options: {
         inline: true,
         title: false,
+        initialViewIndex: this.$route.hash.slice(1),
         viewed (e) {
           this.viewer.full()
         }
@@ -20,9 +21,6 @@ export default {
   },
   computed: {
     ...mapState(['showPicList'])
-  },
-  mounted () {
-    console.log(this.showPicList)
   }
 }
 </script>

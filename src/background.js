@@ -103,7 +103,7 @@ ipcMain.on('close', () => {
   BrowserWindow.getFocusedWindow().close()
 })
 // 展示图片
-ipcMain.on('showPic', e => {
+ipcMain.on('showPic', (e, id) => {
   let win = new BrowserWindow({
     width: 750,
     height: 500,
@@ -113,7 +113,7 @@ ipcMain.on('showPic', e => {
       nodeIntegration: true
     }
   })
-  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/picviewer')
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/picviewer#' + id)
   win.on('closed', () => {
     win = null
   })

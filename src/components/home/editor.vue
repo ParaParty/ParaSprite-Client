@@ -178,6 +178,10 @@ export default {
         width: 1.3em
         height: 1.3em
         vertical-align: sub
+      ::v-deep img
+        max-height: 10em
+        border-radius: 0.2em
+        display: block
     ::v-deep .tippy-box
       outline: none
   .send

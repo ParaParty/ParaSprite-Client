@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     ...mapActions(['setChatDB']),
-    ...mapActions(['addPic']),
+    ...mapActions(['setPicList']),
     showPic () {
       ipcRenderer.send('showPic')
     },
@@ -174,8 +174,16 @@ export default {
     },
     test (e) {
       if (e.target.nodeName === 'IMG') {
-        this.addPic(e.target.getAttribute('src'))
-        ipcRenderer.send('showPic')
+        const picList = []
+        let picIndex = 0
+        document.querySelectorAll('.message img').forEach((pic, index) => {
+          if (pic.y === e.target.y) {
+            picIndex = index
+          }
+          picList.push(pic.src)
+        })
+        this.setPicList(picList)
+        ipcRenderer.send('showPic', picIndex)
       }
     }
   },
@@ -256,10 +264,10 @@ export default {
         width: 1.2em
         height: 1.2em
         vertical-align: sub
-      img
+      ::v-deep img
         max-height: 10em
         border-radius: 0.2em
-        vertical-align: top
+        display: block
       .send-time
         position: absolute
         left: calc(100% + 1em)
