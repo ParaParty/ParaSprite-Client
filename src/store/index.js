@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { createPersistedState, createSharedMutations } from 'vuex-electron'
 import _ from 'lodash'
 
 Vue.use(Vuex)
@@ -163,13 +164,14 @@ export default new Vuex.Store({
       //   lastMsg: '你好，在吗？',
       //   lastMsgNum: 5
       // }
-    ]
+    ],
+    showPicList: []
   },
   mutations: {
     showChat (state, payload) {
       state.nowChatId = payload.id
       state.nowChatType = payload.type
-      this.commit('setRelationInfo', {
+      this.dispatch('setRelationInfo', {
         id: payload.id,
         content: {
           lastMsgNum: 0
@@ -192,7 +194,9 @@ export default new Vuex.Store({
       }
     },
     getMsg (state, payload) {
-      state.chatDB[payload.type][payload.id] ?? Vue.set(state.chatDB.user, payload.id, [])
+      if (!state.chatDB[payload.type][payload.id]) {
+        Vue.set(state.chatDB.user, payload.id, [])
+      }
       const chat = state.chatDB[payload.type][payload.id]
       if (chat.slice(-1)[0] && chat.slice(-1)[0].from === payload.id) {
         chat[chat.length - 1].content.push({ type: 'text', content: payload.content, time: payload.time })
@@ -219,7 +223,9 @@ export default new Vuex.Store({
     },
     getCardMsg (state, payload) {
       // payload.id 发送人id
-      state.chatDB.user[payload.id] ?? Vue.set(state.chatDB.user, payload.id, [])
+      if (!state.chatDB.user[payload.id]) {
+        Vue.set(state.chatDB.user, payload.id, [])
+      }
       // 存入附加联系人信息
       state.include.user[payload.content.id] = payload.include
       // 修改联系人列表状态并发送
@@ -277,10 +283,67 @@ export default new Vuex.Store({
     },
     setChatDB (state, payload) {
       Vue.set(state.chatDB[payload.type], payload.id, [])
+    },
+    addPic (state, payload) {
+      state.showPicList.push(payload)
+    },
+    clear (state) {
+      state.id = ''
+      state.nowChatId = ''
+      state.nowChatType = ''
+      state.chatDB = {
+        user: {},
+        group: {}
+      }
+      state.include = {}
+      state.relationship = []
+      state.showPicList = []
     }
   },
   actions: {
+    showChat (store, payload) {
+      store.commit('showChat', payload)
+    },
+    sendMsg (store, payload) {
+      store.commit('sendMsg', payload)
+    },
+    getMsg (store, payload) {
+      store.commit('getMsg', payload)
+    },
+    getCardMsg (store, payload) {
+      store.commit('getCardMsg', payload)
+    },
+    updateCardMsg (store, payload) {
+      store.commit('updateCardMsg', payload)
+    },
+    setId (store, payload) {
+      store.commit('setId', payload)
+    },
+    setRelation (store, payload) {
+      store.commit('setRelation', payload)
+    },
+    setRelationInfo (store, payload) {
+      store.commit('setRelationInfo', payload)
+    },
+    setInclude (store, payload) {
+      store.commit('setInclude', payload)
+    },
+    setChatDB (store, payload) {
+      store.commit('setChatDB', payload)
+    },
+    addPic (store, payload) {
+      store.commit('addPic', payload)
+    },
+    clear (store) {
+      store.commit('clear')
+    }
   },
   modules: {
-  }
+  },
+  plugins: [
+    createPersistedState({
+      whitelist: ['clear']
+    }),
+    createSharedMutations()
+  ]
 })

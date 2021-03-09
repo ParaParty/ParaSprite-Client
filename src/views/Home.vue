@@ -16,7 +16,7 @@ import contact from '@/components/home/contact.vue'
 import chat from '@/components/home/chat.vue'
 import intro from '@/components/home/intro.vue'
 import chatInfo from '@/components/home/chatInfo.vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setRelation', 'setInclude', 'getMsg', 'getCardMsg', 'updateCardMsg']),
+    ...mapActions(['setRelation', 'setInclude', 'getMsg', 'getCardMsg', 'updateCardMsg']),
     updateRelation () {
       // 初始化联系人列表
       const relationship = []

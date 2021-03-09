@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 // import { ipcRenderer } from 'electron'
 export default {
   data () {
@@ -52,7 +52,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['getCardMsg']),
+    ...mapActions(['getCardMsg']),
     open () {
       this.show = 1
     },

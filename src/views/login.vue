@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import logo from '@/components/logo.vue'
 export default {
   components: {
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setId']),
+    ...mapActions(['setId', 'clear']),
     login () {
       let verify = 1
       this.loginForm.mail.error = ''
@@ -202,6 +202,9 @@ export default {
         this.setId(res.data.id)
       })
     }
+  },
+  mounted () {
+    this.clear()
   }
 }
 </script>

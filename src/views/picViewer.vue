@@ -1,10 +1,11 @@
 <template>
   <div class="viewer" v-viewer="options">
-    <img src="@/assets/avatar2.png" alt="">
+    <img v-for="(src, index) in showPicList" :key="index" :src="src" alt="">
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -16,6 +17,12 @@ export default {
         }
       }
     }
+  },
+  computed: {
+    ...mapState(['showPicList'])
+  },
+  mounted () {
+    console.log(this.showPicList)
   }
 }
 </script>

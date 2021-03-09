@@ -31,7 +31,7 @@ import data from 'emoji-mart-vue-fast/data/all.json'
 import { StaticPicker, EmojiIndex } from 'emoji-mart-vue-fast'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 // 导入vuex
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     StaticPicker
@@ -63,7 +63,7 @@ export default {
     ...mapState(['nowChatId', 'id'])
   },
   methods: {
-    ...mapMutations(['sendMsg', 'setRelationInfo']),
+    ...mapActions(['sendMsg', 'setRelationInfo']),
     send () {
       const time = new Date().getTime()
       this.setRelationInfo({

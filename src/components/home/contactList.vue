@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['showChat']),
+    ...mapActions(['showChat']),
     show (n) {
       if (this.nowShow === 0) {
         this.messageList[n].show = !this.messageList[n].show

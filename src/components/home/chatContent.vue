@@ -14,7 +14,7 @@
         <ul class="message">
           <li v-for="(item, index) in msg.content" :key="index">
             <!-- 文本 -->
-            <p v-if="item.type == 'text'" v-html="item.content"></p>
+            <p @click="test($event)" v-if="item.type == 'text'" v-html="item.content"></p>
             <!-- 图片 -->
             <img v-else-if="item.type == 'img'" @click="showPic" src="@/assets/avatar2.png" alt="">
             <!-- 发送时间 -->
@@ -116,7 +116,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import { EmojiIndex } from 'emoji-mart-vue-fast'
 export default {
@@ -139,7 +139,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setChatDB']),
+    ...mapActions(['setChatDB']),
+    ...mapActions(['addPic']),
     showPic () {
       ipcRenderer.send('showPic')
     },
@@ -170,6 +171,12 @@ export default {
         time: time,
         accept: type
       })
+    },
+    test (e) {
+      if (e.target.nodeName === 'IMG') {
+        this.addPic(e.target.getAttribute('src'))
+        ipcRenderer.send('showPic')
+      }
     }
   },
   mounted () {
