@@ -17,6 +17,8 @@ import chat from '@/components/home/chat.vue'
 import intro from '@/components/home/intro.vue'
 import chatInfo from '@/components/home/chatInfo.vue'
 import { mapState, mapActions } from 'vuex'
+import { remote } from 'electron'
+import Dexie from 'dexie'
 
 export default {
   name: 'Home',
@@ -27,7 +29,7 @@ export default {
     chatInfo
   },
   computed: {
-    ...mapState(['nowChatId'])
+    ...mapState(['nowChatId', 'id', 'chatDB'])
   },
   sockets: {
     getMsg (data) {
@@ -57,7 +59,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setRelation', 'setInclude', 'getMsg', 'getCardMsg', 'updateCardMsg']),
+    ...mapActions(['setRelation', 'setInclude', 'getMsg', 'getCardMsg', 'updateCardMsg', 'getChatDB']),
     updateRelation () {
       // 初始化联系人列表
       const relationship = []
@@ -95,6 +97,30 @@ export default {
   },
   mounted () {
     this.updateRelation()
+    const db = new Dexie('db')
+    db.version(1).stores({
+      chat: 'id, content'
+    })
+    db.open()
+    // db.close()
+    setTimeout(() => {
+      db.chat.get(this.id).then(e => {
+        if (e && e.content) {
+          this.getChatDB(e.content)
+        }
+      })
+    }, 1000)
+    remote.getCurrentWindow().on('close', () => {
+      db.chat.put({ id: this.id, content: this.chatDB })
+    })
+  },
+  beforeDestroy () {
+    const db = new Dexie('db')
+    db.version(1).stores({
+      chat: 'id, content'
+    })
+    db.open()
+    db.chat.put({ id: this.id, content: this.chatDB })
   }
 }
 </script>

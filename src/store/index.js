@@ -171,12 +171,6 @@ export default new Vuex.Store({
     showChat (state, payload) {
       state.nowChatId = payload.id
       state.nowChatType = payload.type
-      this.dispatch('setRelationInfo', {
-        id: payload.id,
-        content: {
-          lastMsgNum: 0
-        }
-      })
     },
     sendMsg (state, payload) {
       const chat = state.chatDB[state.nowChatType][state.nowChatId]
@@ -298,6 +292,9 @@ export default new Vuex.Store({
       state.include = {}
       state.relationship = []
       state.showPicList = []
+    },
+    getChatDB (state, payload) {
+      state.chatDB = payload
     }
   },
   actions: {
@@ -336,6 +333,9 @@ export default new Vuex.Store({
     },
     clear (store) {
       store.commit('clear')
+    },
+    getChatDB (store, payload) {
+      store.commit('getChatDB', payload)
     }
   },
   modules: {

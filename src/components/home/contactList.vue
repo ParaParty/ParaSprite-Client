@@ -90,6 +90,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import _ from 'lodash'
 export default {
   data () {
     return {
@@ -112,7 +113,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showChat']),
+    ...mapActions(['showChat', 'setRelationInfo']),
     show (n) {
       if (this.nowShow === 0) {
         this.messageList[n].show = !this.messageList[n].show
@@ -131,7 +132,16 @@ export default {
         id: id,
         type: type
       })
-      this.$socket.emit('clearLastMsgNum', { id: id })
+      const index = _.findIndex(this.relationship, { id: id })
+      if (this.relationship[index].lastMsgNum) {
+        this.$socket.emit('clearLastMsgNum', { id: id })
+        this.setRelationInfo({
+          id: id,
+          content: {
+            lastMsgNum: 0
+          }
+        })
+      }
     },
     onUserMenu () {
       this.$contextmenu({
