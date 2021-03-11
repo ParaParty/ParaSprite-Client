@@ -83,9 +83,9 @@ export default {
       document.querySelector('.input').innerHTML = ''
       this.$forceUpdate()
       const chatContent = document.querySelector('.chat-content')
-      this.$nextTick(() => {
+      setTimeout(() => {
         chatContent.scrollTop = chatContent.scrollHeight
-      })
+      }, 0)
     },
     // 监听按键操作
     inputKeydown (event) {

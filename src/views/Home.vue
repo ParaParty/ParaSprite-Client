@@ -37,9 +37,9 @@ export default {
       if (this.nowChatId === data.id) {
         const chatContent = document.querySelector('.chat-content')
         if (Math.ceil(chatContent.scrollTop) - (chatContent.scrollHeight - chatContent.clientHeight) < 5) {
-          this.$nextTick(() => {
+          setTimeout(() => {
             chatContent.scrollTop = chatContent.scrollHeight
-          })
+          }, 0)
         }
       } else {
         this.$socket.emit('addLastMsgNum', { id: data.id })
@@ -109,10 +109,21 @@ export default {
           this.getChatDB(e.content)
         }
       })
-    }, 1000)
+    }, 0)
     remote.getCurrentWindow().on('close', () => {
       db.chat.put({ id: this.id, content: this.chatDB })
     })
+    setTimeout(() => {
+      // 获取未读消息
+      this.axios.get('/api/message').then(res => {
+        res.data.forEach(msg => {
+          console.log(msg)
+          if (msg.type === 'msg') {
+            this.getMsg(msg.content)
+          }
+        })
+      })
+    }, 1000)
   },
   beforeDestroy () {
     const db = new Dexie('db')
