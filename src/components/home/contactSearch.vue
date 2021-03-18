@@ -43,7 +43,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-// import { ipcRenderer } from 'electron'
+import { ipcRenderer } from 'electron'
 export default {
   data () {
     return {
@@ -61,20 +61,21 @@ export default {
     },
     showSearch () {
       // TODO 考虑通过搜索添加好友
-      // ipcRenderer.send('showSearch')
-      this.axios.post('/api/users/add', {
-        mail: this.input
-      }).then(res => {
-        this.$toast.showToast(`已向${this.input}发送好友请求！`)
-        this.getCardMsg({
-          id: res.data.userId,
-          time: res.data.time,
-          content: res.data.content,
-          include: res.data.include
-        })
-      }).catch(err => {
-        this.$toast.showToast(err.response.data.message)
-      })
+      ipcRenderer.send('showSearch', this.input)
+      this.axios.get('/api/test')
+      // this.axios.post('/api/users/add', {
+      //   mail: this.input
+      // }).then(res => {
+      //   this.$toast.showToast(`已向${this.input}发送好友请求！`)
+      //   this.getCardMsg({
+      //     id: res.data.userId,
+      //     time: res.data.time,
+      //     content: res.data.content,
+      //     include: res.data.include
+      //   })
+      // }).catch(err => {
+      //   this.$toast.showToast(err.response.data.message)
+      // })
     }
   }
 }

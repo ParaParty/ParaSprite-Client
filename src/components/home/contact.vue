@@ -2,16 +2,19 @@
   <div class="contact">
     <contactSearch/>
     <contactList/>
+    <userInfo/>
   </div>
 </template>
 
 <script>
 import contactSearch from '@/components/home/contactSearch.vue'
 import contactList from '@/components/home/contactList.vue'
+import userInfo from '@/components/home/userInfo.vue'
 export default {
   components: {
     contactSearch,
-    contactList
+    contactList,
+    userInfo
   }
 }
 </script>

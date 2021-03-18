@@ -8,6 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     id: '',
+    userData: {},
     nowChatId: null,
     nowChatType: null,
     // 存储聊天记录
@@ -260,7 +261,14 @@ export default new Vuex.Store({
       })
     },
     setId (state, payload) {
-      state.id = payload
+      state.id = payload._id
+      state.userData = {
+        avatar: payload.avatar,
+        nick: payload.nick,
+        online: payload.online,
+        emoji: payload.emoji,
+        sign: payload.sign
+      }
     },
     setRelation (state, payload) {
       state.relationship = payload

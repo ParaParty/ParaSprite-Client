@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, session } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import './store'
@@ -11,11 +11,11 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-let win
+let mainWin
 
 async function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({
+  mainWin = new BrowserWindow({
     width: 1200,
     height: 700,
     frame: false,
@@ -25,17 +25,19 @@ async function createWindow () {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false,
+      affinity: 'para'
     }
   })
 
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    await mainWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    if (!process.env.IS_TEST) mainWin.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    mainWin.loadURL('app://./index.html')
   }
 }
 
@@ -137,17 +139,19 @@ ipcMain.on('showVideo', e => {
   })
 })
 // 搜索
-ipcMain.on('showSearch', e => {
+ipcMain.on('showSearch', (e, input) => {
   let win = new BrowserWindow({
     width: 800,
     height: 600,
     frame: false,
     // show: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false,
+      affinity: 'para'
     }
   })
-  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/search')
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/search#' + input)
   win.on('closed', () => {
     win = null
   })

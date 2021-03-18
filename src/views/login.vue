@@ -133,7 +133,8 @@ export default {
           this.$router.push('/home')
           this.$socket.connect()
           // this.$socket.emit('setId')
-          this.setId(res.data.id)
+          console.log(res.data)
+          this.setId(res.data)
         }).catch(() => {
           this.loginForm.mail.error = ' - 请检查您的邮箱地址是否正确'
           this.loginForm.password.error = ' - 请检查您的密码是否正确'
@@ -175,7 +176,7 @@ export default {
           password: this.registerForm.password.content
         }).then(res => {
           this.type = 'complete'
-          this.setId(res.data.id)
+          this.setId(res.data)
         }).catch(err => {
           console.log(err)
           this.registerForm.mail.error = ' - 这个邮箱已经被注册过了'
@@ -199,7 +200,7 @@ export default {
       }).then(res => {
         this.$router.push('/home')
         this.$socket.connect()
-        this.setId(res.data.id)
+        this.setId(res.data)
       })
     }
   },
