@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -54,6 +55,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getCardMsg']),
     choose (i) {
       this.type = i
     },
@@ -64,21 +66,21 @@ export default {
         this.searchList = res.data
       })
     },
-    add () {
-      this.axios.get('/api/test')
-      // this.axios.post('/api/users/add', {
-      //   mail: mail
-      // }).then(res => {
-      //   this.$toast.showToast(`已向${this.input}发送好友请求！`)
-      //   this.getCardMsg({
-      //     id: res.data.userId,
-      //     time: res.data.time,
-      //     content: res.data.content,
-      //     include: res.data.include
-      //   })
-      // }).catch(err => {
-      //   this.$toast.showToast(err.response.data.message)
-      // })
+    add (mail) {
+      // this.axios.get('/api/test')
+      this.axios.post('/api/users/add', {
+        mail: mail
+      }).then(res => {
+        this.$toast.showToast(`已向${this.input}发送好友请求！`)
+        this.getCardMsg({
+          id: res.data.userId,
+          time: res.data.time,
+          content: res.data.content,
+          include: res.data.include
+        })
+      }).catch(err => {
+        this.$toast.showToast(err.response.data.message)
+      })
     }
   },
   mounted () {
