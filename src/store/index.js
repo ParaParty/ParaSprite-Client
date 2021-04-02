@@ -349,9 +349,7 @@ export default new Vuex.Store({
   modules: {
   },
   plugins: [
-    createPersistedState({
-      whitelist: ['setPicList']
-    }),
+    createPersistedState(),
     createSharedMutations()
   ]
 })

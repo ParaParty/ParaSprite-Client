@@ -24,7 +24,8 @@
             ]"
         >
           <div class="avatar">
-            <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
+            <img v-if="item.type=='user'" :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
+            <img v-else :src="include.group[item.id].avatar ? 'http://192.168.26.96:7001/public/' + include.group[item.id].avatar : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
           <div class="info">
             <p class="nick">{{item.type == 'user' ? include.user[item.id].nick : include.group[item.id].nick}}</p>
@@ -73,7 +74,7 @@
           ]"
         >
           <div class="avatar">
-            <img :src="include.user[item.id].avatar ? '' : `https://api.multiavatar.com/${item.id}.png`" alt="">
+            <img :src="include.group[item.id].avatar ? 'http://192.168.26.96:7001/public/' + include.group[item.id].avatar : `https://api.multiavatar.com/${item.id}.png`" alt="">
           </div>
           <div class="info">
             <p class="nick">{{include.group[item.id].nick}}</p>

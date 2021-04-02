@@ -88,6 +88,13 @@ export default {
               sign: item.include[0].sign
             }
             include.user[item.include[0]._id] = user
+          } else if (item.type === 'group') {
+            const group = {
+              nick: item.include[0].nick,
+              avatar: item.include[0].avatar,
+              intro: item.include[0].intro
+            }
+            include.group[item.include[0]._id] = group
           }
         })
         this.setInclude(include)

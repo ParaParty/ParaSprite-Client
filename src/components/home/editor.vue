@@ -60,7 +60,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['nowChatId', 'id'])
+    ...mapState(['nowChatType', 'nowChatId', 'id'])
   },
   methods: {
     ...mapActions(['sendMsg', 'setRelationInfo']),
@@ -79,7 +79,11 @@ export default {
         content: document.querySelector('.input').innerHTML
       }
       this.sendMsg(payload)
-      this.$socket.emit('sendMsg', { msg: payload.content, userId: this.nowChatId, time: time })
+      if (this.nowChatType === 'user') {
+        this.$socket.emit('sendMsg', { msg: payload.content, userId: this.nowChatId, time: time })
+      } else {
+        this.$socket.emit('sendGroupMsg', { msg: payload.content, userId: this.nowChatId, time: time })
+      }
       document.querySelector('.input').innerHTML = ''
       this.$forceUpdate()
       const chatContent = document.querySelector('.chat-content')

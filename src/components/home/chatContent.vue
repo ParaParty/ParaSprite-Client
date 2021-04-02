@@ -9,7 +9,8 @@
       <!-- 内容 -->
       <div v-if="msg.type == 'message'" class="content">
         <!-- 昵称 -->
-        <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[msg.from].nick}}</h2>
+        <h2 v-if="nowChatType == 'group' && msg.from == id" class="nick">{{userData.nick}}</h2>
+        <!-- <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[msg.from].nick}}</h2> -->
         <!-- 聊天内容 -->
         <ul class="message">
           <li v-for="(item, index) in msg.content" :key="index">
@@ -126,7 +127,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['id', 'nowChatId', 'nowChatType', 'chatDB', 'include'])
+    ...mapState(['id', 'nowChatId', 'nowChatType', 'chatDB', 'include', 'userData'])
   },
   watch: {
     nowChatId () {
