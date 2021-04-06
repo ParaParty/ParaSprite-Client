@@ -107,7 +107,7 @@ export default {
       this.type = i
     },
     search () {
-      this.axios.post('/api/users/user/get', {
+      this.axios.post('/api/users/search', {
         input: this.input
       }).then(res => {
         this.searchList = res.data

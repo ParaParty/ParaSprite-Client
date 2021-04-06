@@ -127,6 +127,10 @@ export default {
           console.log(msg)
           if (msg.type === 'msg') {
             this.getMsg(msg.content)
+          } else if (msg.type === 'cardMsg') {
+            this.getCardMsg(msg.content)
+          } else if (msg.type === 'updateCardMsg') {
+            this.updateCardMsg(msg.content)
           }
         })
       })
