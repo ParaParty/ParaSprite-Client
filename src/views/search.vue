@@ -13,7 +13,7 @@
       <p v-else-if="createStep == 'create'" class="create-tip">为自己的群组设定一些基础信息。之后，您可以随时修改。</p>
       <p v-else-if="createStep == 'invite'" class="create-tip">还差最后一步，邀请你的好友加群吧~</p>
     </div>
-    <div class="search-content">
+    <div v-if="createStep!= 'invite'" class="search-content">
       <p v-if="searchList.length" class="search-title">搜索到相关结果 {{searchList.length}} 个</p>
       <ul class="search-list">
         <li @click="add(item.mail)" v-for="item in searchList" :key="item._id" class="item">
@@ -29,19 +29,6 @@
             <p class="content">{{item.sign}}</p>
           </div>
         </li>
-        <!-- <li class="item">
-          <div class="hover">
-            <i class="iconfont icon-add"></i>
-            <p>添加好友</p>
-          </div>
-          <div class="avatar">
-            <img src="@/assets/avatar.png" alt="">
-          </div>
-          <div class="info">
-            <p class="nick">用户名</p>
-            <p class="content">个性签名</p>
-          </div>
-        </li> -->
       </ul>
     </div>
     <div v-if="type == 2" class="create-group">
@@ -63,17 +50,17 @@
       </div>
       <div v-else-if="createStep == 'invite'">
         <ul class="search-list">
-          <li @click="add(item.mail)" v-for="item in searchList" :key="item._id" class="item">
+          <li @click="invite(item.id)" v-for="item in searchList" :key="item.id" class="item">
             <div class="hover">
               <i class="iconfont icon-add"></i>
               <p>邀请入群</p>
             </div>
             <div class="avatar">
-              <img :src="`https://api.multiavatar.com/${item._id}.png`" alt="">
+              <img :src="`https://api.multiavatar.com/${item.id}.png`" alt="">
             </div>
             <div class="info">
-              <p class="nick">{{item.nick}}</p>
-              <p class="content">{{item.sign}}</p>
+              <p class="nick">{{include.user[item.id].nick}}</p>
+              <p class="content">{{include.user[item.id].sign}}</p>
             </div>
           </li>
         </ul>
@@ -95,15 +82,18 @@ export default {
         avatar: '',
         nick: '',
         intro: ''
-      }
+      },
+      groupId: ''
     }
   },
   computed: {
-    ...mapState(['relationship'])
+    ...mapState(['relationship', 'include'])
   },
   methods: {
     ...mapActions(['getCardMsg']),
     choose (i) {
+      this.input = ''
+      this.searchList = []
       this.type = i
     },
     search () {
@@ -142,9 +132,21 @@ export default {
       })
     },
     createGroup () {
-      // this.axios.post('/api/groups/create', this.groupForm)
+      this.axios.post('/api/groups/create', this.groupForm).then(res => {
+        this.groupId = res.data.id
+      })
       this.createStep = 'invite'
-      this.searchList = this._.filter(this.relationship, { type: 'user' })
+      this.searchList = this._.filter(this.relationship, item => {
+        return item.type === 'user' && item.group !== '我的服务'
+      })
+    },
+    invite (id) {
+      this.axios.post(`/api/groups/${this.groupId}/invite`, {
+        id: id
+      }).then(res => {
+        this.getCardMsg(res.data)
+      })
+      this.$toast.showToast('已邀请该用户加入群聊！')
     }
   },
   mounted () {

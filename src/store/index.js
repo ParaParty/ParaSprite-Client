@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { createPersistedState, createSharedMutations } from 'vuex-electron'
+import { createSharedMutations } from 'vuex-electron'
 import _ from 'lodash'
 
 Vue.use(Vuex)
@@ -223,6 +223,9 @@ export default new Vuex.Store({
       }
       // 存入附加联系人信息
       state.include.user[payload.content.id] = payload.include
+      if (payload.content.groupId) {
+        state.include.group[payload.content.groupId] = payload.groupInclude
+      }
       // 修改联系人列表状态并发送
       const chat = state.chatDB.user[payload.id]
       const index = _.findIndex(state.relationship, { id: payload.id })
@@ -232,6 +235,11 @@ export default new Vuex.Store({
         info.lastMsg = '收到了新的好友请求'
       } else if (payload.content.type === 'friendReq') {
         info.lastMsg = '发送了新的好友请求'
+        status = '等待验证中'
+      } else if (payload.content.type === 'groupRes') {
+        info.lastMsg = '收到了新的入群邀请'
+      } else if (payload.content.type === 'groupReq') {
+        info.lastMsg = '发送了新的入群邀请'
         status = '等待验证中'
       }
       if (state.nowChatId !== payload.id) {
@@ -349,7 +357,6 @@ export default new Vuex.Store({
   modules: {
   },
   plugins: [
-    createPersistedState(),
     createSharedMutations()
   ]
 })

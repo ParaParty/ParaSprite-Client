@@ -25,10 +25,60 @@
       </div>
       <!-- 卡片信息 -->
       <div v-else-if="msg.type == 'card'" class="card-box">
-        <p class="title">好友验证</p>
+        <!-- 好友验证请求 -->
+        <div class="card-message" v-if="msg.content.type == 'friendRes'">
+          <p class="title">好友验证</p>
+          <div class="card-content">
+            <p>用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>申请添加您为好友。</p>
+          </div>
+          <div v-if="!msg.status" class="btns">
+            <a @click="friendRes(msg.time, 1)" class="btn-confirm">确认</a>
+            <a @click="friendRes(msg.time, 0)">拒绝</a>
+          </div>
+          <div v-else class="status">
+            <p>{{msg.status}}</p>
+          </div>
+        </div>
+        <!-- 好友验证反馈 -->
+        <div class="card-message" v-else-if="msg.content.type == 'friendReq'">
+          <p class="title">好友验证</p>
+          <div class="card-content">
+            <p>已向用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>发送好友申请。</p>
+          </div>
+          <div class="status">
+            <p>{{msg.status}}</p>
+          </div>
+        </div>
+        <!-- 入群邀请请求 -->
+        <div class="card-message" v-if="msg.content.type == 'groupRes'">
+          <p class="title">入群邀请</p>
+          <div class="card-content">
+            <p>用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>邀请您加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
+          </div>
+          <div v-if="!msg.status" class="btns">
+            <a @click="friendRes(msg.time, 1)" class="btn-confirm">确认</a>
+            <a @click="friendRes(msg.time, 0)">拒绝</a>
+          </div>
+          <div v-else class="status">
+            <p>{{msg.status}}</p>
+          </div>
+        </div>
+        <!-- 入群邀请反馈 -->
+        <div class="card-message" v-if="msg.content.type == 'groupReq'">
+          <p class="title">入群邀请</p>
+          <div class="card-content">
+            <p>已邀请用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
+          </div>
+          <div class="status">
+            <p>{{msg.status}}</p>
+          </div>
+        </div>
+        <!-- <p class="title">好友验证</p>
         <div class="card-content">
           <p v-if="msg.content.type == 'friendRes'">用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>申请添加您为好友。</p>
           <p v-if="msg.content.type == 'friendReq'">已向用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>发送好友申请。</p>
+          <p v-if="msg.content.type == 'groupRes'">用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>邀请您加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
+          <p v-if="msg.content.type == 'groupRes'">已邀请用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
         </div>
         <div v-if="!msg.status" class="btns">
           <a @click="friendRes(msg.time, 1)" class="btn-confirm">确认</a>
@@ -36,7 +86,7 @@
         </div>
         <div v-else class="status">
           <p>{{msg.status}}</p>
-        </div>
+        </div> -->
       </div>
       <!-- 提示信息 -->
       <div v-else>
@@ -313,6 +363,8 @@ export default {
     background: var(--block-bg)
     margin: 0.5em 3.5em
     padding: 1em !important
+    .card-message
+      display: contents
     .card-box
       display: flex
       width: 100%
