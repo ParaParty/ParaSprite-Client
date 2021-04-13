@@ -53,11 +53,11 @@
         <div class="card-message" v-if="msg.content.type == 'groupRes'">
           <p class="title">入群邀请</p>
           <div class="card-content">
-            <p>用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>邀请您加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
+            <p>用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>邀请您加入群聊<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span>。</p>
           </div>
           <div v-if="!msg.status" class="btns">
-            <a @click="friendRes(msg.time, 1)" class="btn-confirm">确认</a>
-            <a @click="friendRes(msg.time, 0)">拒绝</a>
+            <a @click="groupRes(msg.time, 1)" class="btn-confirm">确认</a>
+            <a @click="groupRes(msg.time, 0)">拒绝</a>
           </div>
           <div v-else class="status">
             <p>{{msg.status}}</p>
@@ -67,7 +67,7 @@
         <div class="card-message" v-if="msg.content.type == 'groupReq'">
           <p class="title">入群邀请</p>
           <div class="card-content">
-            <p>已邀请用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>加入群聊。<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span></p>
+            <p>已邀请用户<span class="card-mark">{{include.user[msg.content.id].nick}}</span>加入群聊<span class="card-mark">{{include.group[msg.content.groupId].nick}}</span>。</p>
           </div>
           <div class="status">
             <p>{{msg.status}}</p>
@@ -218,6 +218,21 @@ export default {
         target.status = '已拒绝'
       }
       this.axios.post('/api/users/add/return', {
+        id: target.content.id,
+        time: time,
+        accept: type
+      })
+    },
+    groupRes (time, type) {
+      const target = this._.find(this.chatDB[this.nowChatType][this.nowChatId], {
+        time: time
+      })
+      if (type) {
+        target.status = '已确认'
+      } else {
+        target.status = '已拒绝'
+      }
+      this.axios.post(`/api/groups/${target.content.groupId}/return`, {
         id: target.content.id,
         time: time,
         accept: type

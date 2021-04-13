@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { createSharedMutations } from 'vuex-electron'
+import { createPersistedState, createSharedMutations } from 'vuex-electron'
 import _ from 'lodash'
 
 Vue.use(Vuex)
@@ -308,6 +308,7 @@ export default new Vuex.Store({
       state.include = {}
       state.relationship = []
       state.showPicList = []
+      state.userData = {}
     },
     getChatDB (state, payload) {
       state.chatDB = payload
@@ -357,6 +358,7 @@ export default new Vuex.Store({
   modules: {
   },
   plugins: [
+    createPersistedState(),
     createSharedMutations()
   ]
 })
