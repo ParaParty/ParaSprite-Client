@@ -3,11 +3,11 @@
     <contact/>
     <div class="content">
       <transition name="chat">
-        <chat v-if="nowChatId"/>
+        <chat :style="{width: this.nowChatType == 'group' ? 'calc(100% - 12em)' : ''}" v-if="nowChatId"/>
       </transition>
       <intro/>
+      <chatInfo/>
     </div>
-    <chatInfo/>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
     chatInfo
   },
   computed: {
-    ...mapState(['nowChatId', 'id', 'chatDB'])
+    ...mapState(['nowChatId', 'nowChatType', 'id', 'chatDB'])
   },
   sockets: {
     getMsg (data) {
