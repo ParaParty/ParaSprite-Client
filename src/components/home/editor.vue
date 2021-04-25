@@ -82,14 +82,14 @@ export default {
       if (this.nowChatType === 'user') {
         this.$socket.emit('sendMsg', { msg: payload.content, userId: this.nowChatId, time: time })
       } else {
-        this.$socket.emit('sendGroupMsg', { msg: payload.content, userId: this.nowChatId, time: time })
+        this.$socket.emit('sendGroupMsg', { msg: payload.content, groupId: this.nowChatId, time: time })
       }
       document.querySelector('.input').innerHTML = ''
       this.$forceUpdate()
       const chatContent = document.querySelector('.chat-content')
       setTimeout(() => {
         chatContent.scrollTop = chatContent.scrollHeight
-      }, 0)
+      }, 50)
     },
     // 监听按键操作
     inputKeydown (event) {

@@ -9,8 +9,8 @@
       <!-- 内容 -->
       <div v-if="msg.type == 'message'" class="content">
         <!-- 昵称 -->
-        <h2 v-if="nowChatType == 'group' && msg.from == id" class="nick">{{userData.nick}}</h2>
-        <!-- <h2 v-if="nowChatType == 'group'" class="nick">{{include.user[msg.from].nick}}</h2> -->
+        <!-- <h2 v-if="nowChatType == 'group' && msg.from == id" class="nick">{{userData.nick}}</h2> -->
+        <h2 v-if="nowChatType == 'group' && include.user[msg.from]" class="nick">{{include.user[msg.from].nick}}</h2>
         <!-- 聊天内容 -->
         <ul class="message">
           <li v-for="(item, index) in msg.content" :key="index">
@@ -181,6 +181,10 @@ export default {
   },
   watch: {
     nowChatId () {
+      const chatContent = document.querySelector('.chat-content')
+      setTimeout(() => {
+        chatContent.scrollTop = chatContent.scrollHeight
+      }, 0)
       if (!this.chatDB[this.nowChatType][this.nowChatId]) {
         this.setChatDB({
           type: this.nowChatType,
@@ -260,6 +264,10 @@ export default {
         id: this.nowChatId
       })
     }
+    const chatContent = document.querySelector('.chat-content')
+    setTimeout(() => {
+      chatContent.scrollTop = chatContent.scrollHeight
+    }, 0)
   }
 }
 </script>

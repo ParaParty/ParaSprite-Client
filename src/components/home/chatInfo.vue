@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -46,11 +46,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addInclude']),
     getGroupList () {
       const managers = []
       const users = []
       this.axios.get(`/api/groups/${this.nowChatId}/users`).then(res => {
         res.data.forEach(item => {
+          this.addInclude({
+            id: item.include[0]._id,
+            type: 'user',
+            content: item.include[0]
+          })
           if (item.groupType === 'creator') {
             this.creatorData = item.include[0]
           } else if (item.groupType === 'managerData') {

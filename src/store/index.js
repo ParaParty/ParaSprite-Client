@@ -198,7 +198,7 @@ export default new Vuex.Store({
       } else {
         chat.push({
           type: 'message',
-          from: payload.id,
+          from: payload.from || payload.id,
           time: payload.time,
           content: [
             { type: 'text', content: payload.content, time: payload.time }
@@ -312,6 +312,9 @@ export default new Vuex.Store({
     },
     getChatDB (state, payload) {
       state.chatDB = payload
+    },
+    addInclude (state, payload) {
+      state.include[payload.type][payload.id] = payload.content
     }
   },
   actions: {
@@ -353,6 +356,9 @@ export default new Vuex.Store({
     },
     getChatDB (store, payload) {
       store.commit('getChatDB', payload)
+    },
+    addInclude (store, payload) {
+      store.commit('addInclude', payload)
     }
   },
   modules: {
