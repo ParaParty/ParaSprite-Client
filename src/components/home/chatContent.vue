@@ -15,7 +15,7 @@
         <ul class="message">
           <li v-for="(item, index) in msg.content" :key="index">
             <!-- 文本 -->
-            <p @click="test($event)" v-if="item.type == 'text'" v-html="item.content"></p>
+            <p @click="clickText($event, msg.from === id)" v-if="item.type == 'text'" v-html="item.content"></p>
             <!-- 图片 -->
             <img v-else-if="item.type == 'img'" @click="showPic" src="@/assets/avatar2.png" alt="">
             <!-- 发送时间 -->
@@ -95,8 +95,8 @@
     </li>
     <!-- <li class="notice">
       <p>静态测试区域</p>
-    </li>
-    <li class="card">
+    </li> -->
+    <!-- <li class="card">
       <p class="title">好友验证</p>
       <div class="card-content">
         <p>用户<span class="card-mark">@某人</span>申请添加您为好友。</p>
@@ -117,8 +117,8 @@
     </li>
     <li class="notice">
       <p>😥 某人 退出了群聊！</p>
-    </li>
-    <li>
+    </li> -->
+    <!-- <li>
       <div class="avatar">
         <img src="@/assets/avatar.png" alt="">
       </div>
@@ -126,21 +126,17 @@
         <h2 class="nick">陆陆侠</h2>
         <ul class="message">
           <li>
-            <p>嘿嘿！</p>
+            <p @click="clickText($event)">
+              <span class="video-message">
+                已发起视频聊天
+              </span>
+            </p>
             <span class="send-time">9:23</span>
-          </li>
-          <li>
-            <p>你好，在吗？<img class="emoji" src="/emoji/1f600.png" alt="😀"></p>
-            <span class="send-time">9:23</span>
-          </li>
-          <li @click="showPic">
-            <img src="@/assets/avatar2.png" alt="">
-            <span class="send-time">9:24</span>
           </li>
         </ul>
       </div>
-    </li>
-    <li class="right">
+    </li> -->
+    <!-- <li class="right">
       <div class="avatar">
         <img src="@/assets/avatar2.png" alt="">
       </div>
@@ -242,7 +238,7 @@ export default {
         accept: type
       })
     },
-    test (e) {
+    clickText (e, selfMsg) {
       if (e.target.nodeName === 'IMG') {
         const picList = []
         let picIndex = 0
@@ -254,6 +250,9 @@ export default {
         })
         this.setPicList(picList)
         ipcRenderer.send('showPic', picIndex)
+      }
+      if (e.target.classList.contains('video-message')) {
+        ipcRenderer.send('showVideo', selfMsg)
       }
     }
   },
@@ -419,4 +418,13 @@ export default {
       position: absolute
       right: 0
       color: var(--dark)
+  .chat-content ::v-deep
+    .video-message
+      display: flex
+      align-items: center
+      background-image: url(~@/assets/img/video.svg)
+      background-size: 2em
+      line-height: 2em
+      background-repeat: no-repeat
+      padding-left: 2.5em
 </style>

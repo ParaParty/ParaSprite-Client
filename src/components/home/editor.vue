@@ -123,7 +123,31 @@ export default {
       }
     },
     showVideo () {
-      ipcRenderer.send('showVideo')
+      ipcRenderer.send('showVideo', true)
+      const time = new Date().getTime()
+      this.setRelationInfo({
+        id: this.nowChatId,
+        content: {
+          inChat: true,
+          lastMsg: '发起视频聊天',
+          lastActiveTime: time
+        }
+      })
+      const payload = {
+        time: time,
+        content: '<span class="video-message">已发起视频聊天</span>'
+      }
+      this.sendMsg(payload)
+      if (this.nowChatType === 'user') {
+        this.$socket.emit('sendMsg', { msg: payload.content, userId: this.nowChatId, time: time })
+      } else {
+        this.$socket.emit('sendGroupMsg', { msg: payload.content, groupId: this.nowChatId, time: time })
+      }
+      this.$forceUpdate()
+      const chatContent = document.querySelector('.chat-content')
+      setTimeout(() => {
+        chatContent.scrollTop = chatContent.scrollHeight
+      }, 50)
     }
   },
   mounted () {

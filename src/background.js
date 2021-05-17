@@ -123,7 +123,7 @@ ipcMain.on('showPic', (e, id) => {
   // win.show()
 })
 // 视频
-ipcMain.on('showVideo', e => {
+ipcMain.on('showVideo', (e, self) => {
   let win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -133,7 +133,8 @@ ipcMain.on('showVideo', e => {
       nodeIntegration: true
     }
   })
-  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/video')
+  const type = self ? 'answer' : 'offer'
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/video#' + type)
   win.on('closed', () => {
     win = null
   })
