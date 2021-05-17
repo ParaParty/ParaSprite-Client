@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <pop/>
     <titleBar/>
     <sidebar/>
     <transition name="show">
@@ -11,10 +12,12 @@
 <script>
 import titleBar from '@/components/titleBar.vue'
 import sidebar from '@/components/sidebar.vue'
+import pop from '@/components/pop.vue'
 export default {
   components: {
     titleBar,
-    sidebar
+    sidebar,
+    pop
   },
   mounted () {
     document.body.classList.add('light-theme')
@@ -30,7 +33,7 @@ export default {
 </script>
 
 <style lang="sass">
-  @import url('https://at.alicdn.com/t/font_2176265_22rdon7l3m4.css')
+  @import url('https://at.alicdn.com/t/font_2176265_jnsky3zkool.css')
   *, *:after, *:before
     position: relative
     box-sizing: border-box

@@ -12,7 +12,7 @@
           <i class="iconfont icon-zhankai"></i>
           {{lists.name}}
         </li>
-        <li @contextmenu.prevent='onUserMenu'
+        <li @contextmenu.prevent='onUserMenu(item.id)'
             @click="choose(item.id, item.type)"
             v-for="item in lists.list"
             :key="item.type + item.id"
@@ -55,6 +55,7 @@
           </div>
           <div class="info">
             <p class="nick">{{include.user[item.id].nick}}</p>
+            <p class="content">{{include.user[item.id].sign ? include.user[item.id].sign : '这个人很懒，什么都没有写'}}</p>
             <div>
               <p class="content">{{include.user[item.id].emoji}}{{include.user[item.id].sign}} </p>
             </div>
@@ -144,14 +145,13 @@ export default {
         })
       }
     },
-    onUserMenu () {
+    onUserMenu (id) {
       this.$contextmenu({
         items: [
-          { label: '个人资料' },
-          { label: '添加备注' },
-          { label: '移出消息列表', divided: true },
-          { label: '屏蔽此人消息' },
-          { label: '删除好友' }
+          { label: '置顶调整', onClick: () => { this.axios.get(`/api/${id}/top`) } },
+          { label: '修改备注' },
+          { label: '移出消息列表', divided: true, onClick: () => { this.axios.get(`/api/${id}/remove`) } },
+          { label: '删除联系人', onClick: () => { this.axios.get(`/api/${id}/delete`); this.showChat({ id: null, type: null }) } }
         ],
         customClass: 'contextmenu',
         event

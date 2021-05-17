@@ -11,6 +11,7 @@ export default new Vuex.Store({
     userData: {},
     nowChatId: null,
     nowChatType: null,
+    showPop: '',
     // 存储聊天记录
     chatDB: {
       user: {
@@ -315,6 +316,9 @@ export default new Vuex.Store({
     },
     addInclude (state, payload) {
       state.include[payload.type][payload.id] = payload.content
+    },
+    setShowPop (state, payload) {
+      state.showPop = payload
     }
   },
   actions: {
@@ -359,6 +363,9 @@ export default new Vuex.Store({
     },
     addInclude (store, payload) {
       store.commit('addInclude', payload)
+    },
+    setShowPop (store, payload) {
+      store.commit('setShowPop', payload)
     }
   },
   modules: {

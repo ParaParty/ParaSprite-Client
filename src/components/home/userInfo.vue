@@ -4,17 +4,20 @@
       <img :src='`https://api.multiavatar.com/${id}.png`' alt="">
     </div>
     <div class="info">
-      <p class="nick">{{userData.nick}}</p>
-      <p class="content">个性签名</p>
+      <p @click="setShowPop('changeName')" class="nick">{{userData.nick}}</p>
+      <p @click="setShowPop('changeSign')" class="content">{{userData.sign ? userData.sign : '这个人很懒，什么都没有写'}}</p>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState(['id', 'userData'])
+  },
+  methods: {
+    ...mapActions(['setShowPop'])
   }
 }
 </script>
@@ -37,6 +40,8 @@ export default {
   .info
     margin-left: 0.5em
     width: calc(100% - 3em)
+  .info p
+    cursor: pointer
   .nick
     color: var(--text)
     margin-bottom: 0.1em

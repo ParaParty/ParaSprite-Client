@@ -19,7 +19,7 @@
             <!-- 图片 -->
             <img v-else-if="item.type == 'img'" @click="showPic" src="@/assets/avatar2.png" alt="">
             <!-- 发送时间 -->
-            <span class="send-time">time</span>
+            <span class="send-time">{{getTime(msg.time)}}</span>
           </li>
         </ul>
       </div>
@@ -254,6 +254,9 @@ export default {
       if (e.target.classList.contains('video-message')) {
         ipcRenderer.send('showVideo', selfMsg)
       }
+    },
+    getTime (time) {
+      return new Date(time).toLocaleString()
     }
   },
   mounted () {
