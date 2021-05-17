@@ -4,7 +4,7 @@
     <li v-for="(msg, index) in chatDB[nowChatType][nowChatId]" :key="index" :class="getClass(msg)">
       <!-- 头像 -->
       <div v-if="msg.type == 'message'" class="avatar">
-        <img src="@/assets/avatar.png" alt="">
+        <img :src="`https://api.multiavatar.com/${msg.from}.png`" alt="">
       </div>
       <!-- 内容 -->
       <div v-if="msg.type == 'message'" class="content">

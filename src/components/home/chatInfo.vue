@@ -4,18 +4,18 @@
       <p class="title">管理员</p>
       <ul class="contact">
         <li>
-          <img src="@/assets/avatar.png" alt="">
+          <img :src="`https://api.multiavatar.com/${creatorData._id}.png`" alt="">
           <p>{{creatorData.nick}}</p>
         </li>
         <li v-for="item in managerData" :key="item._id">
-          <img src="@/assets/avatar.png" alt="">
+          <img :src="`https://api.multiavatar.com/${item._id}.png`" alt="">
           <p>{{item.nick}}</p>
         </li>
       </ul>
       <p class="title">成员</p>
       <ul class="contact">
         <li v-for="item in userData" :key="item._id">
-          <img src="@/assets/avatar.png" alt="">
+          <img :src="`https://api.multiavatar.com/${item._id}.png`" alt="">
           <p>{{item.nick}}</p>
         </li>
       </ul>

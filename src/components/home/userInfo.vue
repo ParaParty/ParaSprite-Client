@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="avatar">
-      <img src="@/assets/avatar.png" alt="">
+      <img :src='`https://api.multiavatar.com/${id}.png`' alt="">
     </div>
     <div class="info">
       <p class="nick">{{userData.nick}}</p>
